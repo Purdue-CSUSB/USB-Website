@@ -82,7 +82,7 @@ scraper re-sorts by timestamp.
 **Classification looks at the picture, not just the caption.** USB announces
 events as flyer graphics where the date, time and room number are burned into
 the image and never written in the caption, so a text-only classifier misses
-them. `qwen/qwen3.6-27b` is Groq's vision model (free preview tier); it takes at
+them. `qwen/qwen3.8-27b` is Groq's vision model (free preview tier); it takes at
 most 5 images per request, so posts go up in batches of 5 with each caption
 interleaved before its own image.
 

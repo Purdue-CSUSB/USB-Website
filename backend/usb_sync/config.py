@@ -30,8 +30,8 @@ CLASSIFIED_COLLECTION = "instagram_classified"
 # Default for GROQ_MODEL. Must be vision-capable: USB announces events as flyer
 # graphics where the date, time and location often live in the image rather than
 # the caption, so the classifier has to actually look at the picture.
-DEFAULT_GROQ_MODEL = "qwen/qwen3.6-27b"
-# Groq allows up to 5 images per request, but the free tier caps qwen3.6-27b at
+DEFAULT_GROQ_MODEL = "qwen/qwen3.8-27b"
+# Groq allows up to 5 images per request, but the free tier caps qwen3.8-27b at
 # 8,000 tokens/minute and images are expensive (~1,300 tokens each at 512px). One
 # post per request keeps each call near 2,200 tokens, and means a single bad
 # generation costs one verdict instead of a whole batch.
@@ -44,7 +44,7 @@ VISION_BATCH_PAUSE = 20.0
 VISION_MAX_RETRIES = 4
 # Groq charges max_tokens against the rate-limit budget whether or not the model
 # generates that much, so this is a direct multiplier on daily quota. The reply
-# is a few dozen tokens of JSON; the headroom is only there because qwen3.6 is a
+# is a few dozen tokens of JSON; the headroom is only there because qwen3.8 is a
 # reasoning model and can emit some thinking before the answer.
 VISION_MAX_TOKENS = 1024
 # ...so also ask it not to think. Dropped automatically if the model rejects it.

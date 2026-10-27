@@ -17,7 +17,7 @@ import re
 import time
 from typing import Dict, List, Sequence
 
-from groq import BadRequestError, Groq, RateLimitError
+from groq import BadRequestError, Groq, NotFoundError, RateLimitError
 
 from .instagram import ScrapedPost
 
@@ -26,6 +26,10 @@ log = logging.getLogger(__name__)
 
 class DailyQuotaExhausted(RuntimeError):
     """Groq's per-day token budget is gone; no amount of waiting helps today."""
+
+
+class ModelUnavailable(RuntimeError):
+    """GROQ_MODEL does not exist (Groq retires preview models); every request will fail."""
 
 
 def _quota_summary(message: str) -> str:
@@ -259,6 +263,9 @@ def _classify_batch(
                      _quota_summary(message), wait, attempt + 1, max_retries)
             time.sleep(wait)
 
+        except NotFoundError as exc:
+            raise ModelUnavailable(str(exc)[:200]) from exc
+
         except BadRequestError as exc:
             message = str(exc)
             if effort and "reasoning" in message.lower():
@@ -318,6 +325,13 @@ def classify_posts(
             # Fill the remainder from the heuristic so the caller still gets a
             # complete map, but let it know the run is not trustworthy.
             log.error("Groq daily token quota exhausted (%s); stopping classification", exc)
+            for remaining in batches[index:]:
+                for post in remaining:
+                    verdicts.setdefault(post.shortcode, _heuristic_verdict(post))
+            break
+        except ModelUnavailable as exc:
+            log.error("Groq model %s is unavailable (%s); set GROQ_MODEL to a current "
+                      "vision model from https://console.groq.com/docs/models", model, exc)
             for remaining in batches[index:]:
                 for post in remaining:
                     verdicts.setdefault(post.shortcode, _heuristic_verdict(post))

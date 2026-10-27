@@ -40,7 +40,7 @@ jobs:
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
           MONGODB_DB: ${{ vars.MONGODB_DB || 'InstagramPosts' }}
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
-          GROQ_MODEL: ${{ vars.GROQ_MODEL || 'qwen/qwen3.6-27b' }}
+          GROQ_MODEL: ${{ vars.GROQ_MODEL || 'qwen/qwen3.8-27b' }}
           IG_PROFILE: ${{ vars.IG_PROFILE || 'purdueusb' }}
           IG_USERNAME: ${{ secrets.IG_USERNAME }}
           # Only ever used by the seeding script run locally - the job below
