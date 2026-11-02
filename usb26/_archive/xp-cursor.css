@@ -1,0 +1,2 @@
+/* Classic arrow cursor everywhere; links, text and resize handles keep the system cursors. */
+html { cursor: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAiCAYAAABbXymAAAAAZElEQVR42t3WMRIAEAxE0dz/0jR0ZIjNZocZHe93wsysjQ1f6TA8kAvPhQxwYGSACyMCNfBLoBaOBDTgm4AWfBLQhL2ABrwYDLtNhhHPKQdeXAwHcmHnoC4MH7pp8L//D43faQdmzAgx8vNFnwAAAABJRU5ErkJggg==") 0 0, default; }

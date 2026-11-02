@@ -1,0 +1,141 @@
+/* Windows XP "Luna" theme: Tahoma and Trebuchet, glossy blue title bars, beige frames, 3D buttons,
+   green Start button. Text always sits on white panels at 14px or larger so it stays easy to read.
+   Loads after xp.css and xp-content.css and overrides their modern styling. */
+
+:root {
+  --luna: #0054e3;
+  --luna-d: #0a3fd8;
+  --beige: #ece9d8;
+  --panel-edge: #7f9db9;
+  --blue: #2f6fdc;
+  --navy: #0b2a8f;
+  --ink: #111;
+  --muted: #4d5a77;
+  --line: #c3cfe6;
+  --soft: #f3f6fc;
+  --link: #0033cc;
+  --task-h: 40px;
+  --font: Tahoma, "Segoe UI", Verdana, Geneva, sans-serif;
+  --head: "Trebuchet MS", Tahoma, Verdana, sans-serif;
+  --retro: "Trebuchet MS", Tahoma, Verdana, sans-serif;
+  --luna-bar: linear-gradient(180deg, #0997ff 0%, #0053ee 8%, #0050ee 40%, #0066ff 88%, #0066ff 93%, #005bff 95%, #003dd7 100%);
+  --luna-bar-off: linear-gradient(180deg, #8aa6e6 0%, #7697e7 8%, #7e9ee3 40%, #8aa8f0 88%, #85a2e7 100%);
+  --xp-button: linear-gradient(180deg, #fff 0%, #ecebe5 86%, #d8d0c4 100%);
+}
+
+html { background: #4a8be0; }
+body { font: 14px/1.5 var(--font); color: var(--ink); letter-spacing: 0; }
+h1, h2, h3, h4, .title, .wordmark, .fh, .pane-head, .pane-body h3, .card > h3, .obj h4, .program h3, .boot-name { font-family: var(--head); }
+::selection { background: #316ac5; color: #fff; }
+a { color: var(--link); }
+
+::-webkit-scrollbar { width: 17px; height: 17px; }
+::-webkit-scrollbar-track { background: #f3f1e9; border-left: 1px solid #d6d2c2; }
+::-webkit-scrollbar-thumb { background: linear-gradient(90deg, #c3d6fb, #96b6f2 50%, #c3d6fb); border: 1px solid #6c8fe0; border-radius: 3px; }
+
+/* ---------- Desktop icon ---------- */
+.icon { position: relative; font: 14px/1.25 var(--font); color: #fff; text-shadow: 1px 1px 2px #000, 0 0 4px #000; }
+.icon .ico { width: 48px; height: 48px; }
+.icon:hover { background: rgba(49, 106, 197, 0.4); border-color: rgba(255, 255, 255, 0.5); }
+.icon[aria-current="true"] { background: rgba(49, 106, 197, 0.7); border-color: #fff; }
+html.empty-desk .icon { animation: nudge 1.3s ease-in-out infinite; }
+html.empty-desk .icon::after {
+  content: "Click to open"; position: absolute; left: calc(100% + 8px); top: 50%; z-index: 5; transform: translateY(-50%);
+  padding: 3px 9px; color: #000; font: 12px var(--font); white-space: nowrap; text-shadow: none;
+  background: #ffffe1; border: 1px solid #000; border-radius: 3px;
+}
+@keyframes nudge { 50% { transform: translateY(-5px); } }
+
+/* ---------- Windows ---------- */
+.win { padding: 0 3px 3px; overflow: hidden; background: var(--luna-d); border: 0; border-radius: 8px 8px 0 0; box-shadow: 0 8px 24px rgba(0, 20, 80, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.25); }
+html.wm .win:not(.active) { background: #6d8ad8; box-shadow: 0 6px 18px rgba(0, 20, 80, 0.3); }
+html.wm .win.dragging { box-shadow: 0 16px 40px rgba(0, 20, 80, 0.6); }
+.titlebar { height: 30px; margin: 0 -3px; padding: 0 5px 0 9px; gap: 7px; border-radius: 8px 8px 0 0; background: var(--luna-bar); font: 700 14px var(--head); text-shadow: 1px 1px 0 #0a246a; }
+html.wm .win:not(.active) .titlebar { background: var(--luna-bar-off); }
+html.wm .titlebar, html.wm .win.dragging .titlebar { cursor: default; }
+.title { font-family: var(--head); font-size: 14px; }
+.win-inner { padding: 14px; background: var(--beige); }
+.win.max { border-radius: 0; }
+.ctl { gap: 2px; }
+.ctl button { width: 22px; height: 22px; border: 1px solid #fff; border-radius: 3px; background: radial-gradient(circle at 30% 25%, #7ea8ff, #2a62e8 70%); box-shadow: inset 0 0 2px rgba(255, 255, 255, 0.6); }
+.ctl button:hover { background: radial-gradient(circle at 30% 25%, #9cbcff, #3b73f0 70%); }
+.ctl .close { background: radial-gradient(circle at 30% 25%, #f0a089, #d9421b 70%); }
+.ctl .close:hover { background: radial-gradient(circle at 30% 25%, #f7b9a5, #e8512a 70%); }
+.ctl .min .g::before { left: 6px; top: 13px; width: 9px; height: 3px; }
+.ctl .max .g::before { left: 5px; top: 5px; width: 10px; height: 9px; border-width: 2px; border-top-width: 3px; border-radius: 0; }
+.ctl .close .g::before { font: 700 17px/1 var(--font); }
+
+/* ---------- Buttons and panels ---------- */
+.btn { min-height: 28px; padding: 4px 16px; font: 14px var(--font); color: #000; background: var(--xp-button); border: 1px solid #003c74; border-radius: 3px; box-shadow: none; }
+.btn:visited { color: #000; }
+.btn:hover { background: var(--xp-button); border-color: #003c74; box-shadow: inset 0 0 0 2px #f8b330; }
+.btn:active { background: linear-gradient(180deg, #cdcac3, #e3e3db 8%, #e5e5de); box-shadow: none; }
+.btn.default { color: #000; background: var(--xp-button); box-shadow: inset 0 0 0 2px #98b8ea; }
+.btn.default:visited { color: #000; }
+.btn.default:hover { background: var(--xp-button); box-shadow: inset 0 0 0 2px #f8b330; }
+.sbtn { width: 34px; height: 34px; }
+
+.card, .panel, .welcome, .explorer, .former, .post, .addr-box { background: #fff; border: 1px solid var(--panel-edge); border-radius: 0; box-shadow: none; }
+.card > h3 { color: var(--navy); font-size: 17px; }
+.welcome-main h1 { color: var(--navy); font-family: var(--head); }
+.program:hover { border-color: #f8b330; box-shadow: inset 0 0 0 1px #f8b330; }
+.program:focus-within { border-color: #f8b330; box-shadow: inset 0 0 0 1px #f8b330, 0 0 0 2px rgba(47, 111, 220, 0.4); }
+.obj .ico, .program .ico { color: inherit; }
+
+/* Explorer / members */
+.pane { background: linear-gradient(180deg, #7ba2e7, #6375d6); border: 0; border-right: 1px solid var(--panel-edge); }
+.pane-head { margin: 0 0 10px; padding: 5px 10px; color: #fff; text-transform: none; letter-spacing: 0; font-size: 14px; background: linear-gradient(90deg, #0c4ccc, #4d86e8); }
+.pane-body { padding: 10px; color: var(--navy); background: #d6dff7; }
+.avatar { border: 2px solid #fff; border-radius: 4px; box-shadow: 0 0 0 1px #8a9ab8, 1px 2px 4px rgba(0, 0, 0, 0.35); }
+.file { border-radius: 3px; }
+.file:hover { background: #eef3fc; border-color: #9db8ea; }
+.file[aria-pressed="true"] { background: #316ac5; border-color: #316ac5; }
+.file[aria-pressed="true"] .fname, .file[aria-pressed="true"] .fmeta { color: #fff; }
+.status { padding: 3px 8px; color: #333; background: var(--beige); border-top: 1px solid #fff; }
+.tog { border: 1px solid #003c74; border-radius: 3px; background: var(--xp-button); }
+.former summary:hover .tog { box-shadow: inset 0 0 0 2px #f8b330; background: var(--xp-button); }
+
+/* ---------- Where to go: navigation tiles on the landing window ---------- */
+.goto { margin: 14px 0 0; }
+.goto > h3 { margin: 0 0 8px; color: var(--navy); font: 700 17px var(--head); }
+.goto ul { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); gap: 8px; margin: 0; padding: 0; list-style: none; }
+.tile { display: flex; align-items: center; gap: 10px; padding: 10px 12px; color: #111; text-decoration: none; background: #fff; border: 1px solid var(--panel-edge); }
+.tile:visited { color: #111; }
+.tile:hover { background: #fffaf0; border-color: #f8b330; box-shadow: inset 0 0 0 1px #f8b330; }
+.tile .ico { flex: none; width: 36px; height: 36px; }
+.tile strong { display: block; color: var(--navy); font: 700 15px var(--head); }
+.tile small { display: block; color: var(--muted); font-size: 13px; line-height: 1.3; }
+.about { margin-top: 14px; }
+
+/* ---------- Footer watermark ---------- */
+.foot { color: #111; background: rgba(236, 233, 216, 0.96); border: 2px solid var(--luna); border-radius: 6px; backdrop-filter: none; box-shadow: 0 4px 14px rgba(0, 20, 80, 0.35); }
+.foot a, .foot a:visited { color: var(--link); }
+.foot .brand { color: var(--navy); font: italic 700 19px var(--head); }
+.foot .btn { color: #000; background: var(--xp-button); }
+
+/* ---------- Taskbar ---------- */
+.taskbar { height: var(--task-h); gap: 4px; padding: 0 0 0 0; background: linear-gradient(180deg, #3168d5 0%, #4993e6 3%, #2157d7 9%, #245edb 50%, #2459d5 88%, #1941a5 96%, #1941a5 100%); border-top: 1px solid #0c3fc8; backdrop-filter: none; }
+.start { height: 100%; padding: 0 22px 0 10px; border-radius: 0 14px 14px 0; font: italic 700 22px var(--head); text-shadow: 1px 1px 2px #1a4d15; background: linear-gradient(180deg, #5eb350 0%, #3c9a32 12%, #2f8a2a 50%, #3a9a31 88%, #2a7a24 100%); box-shadow: inset -2px 0 3px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.5); }
+.start .ico { width: 26px; height: 26px; }
+.tasks { padding: 4px 6px; }
+.task { height: 100%; font-size: 13px; background: #3c81f3; border: 1px solid #1d4fb5; border-bottom-width: 1px; border-radius: 3px; box-shadow: inset 0 0 1px rgba(255, 255, 255, 0.6); }
+.task:hover { background: #5b97f5; }
+.task[aria-current="true"] { background: #1e52b7; border-bottom-color: #1d4fb5; box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.45); }
+.tray { height: 100%; padding: 0 12px; font-size: 13px; background: linear-gradient(180deg, #0c59b9 0%, #139ee9 6%, #18b5f2 10%, #139beb 14%, #1290e8 19%, #0d8ce4 63%, #0d9fed 81%, #0f9eed 88%, #119ef0 91%, #1656c5 95%, #003d9f 100%); border-left: 1px solid #1042af; box-shadow: inset 1px 0 1px #18bbff; }
+
+/* ---------- Start menu ---------- */
+.start-menu { bottom: var(--task-h); left: 0; border: 1px solid #0831d9; border-bottom: 0; border-radius: 8px 8px 0 0; box-shadow: 4px -2px 14px rgba(0, 0, 30, 0.5); }
+.sm-head { background: linear-gradient(180deg, #1868ce 0%, #0e60cb 12%, #0e5fd8 20%, #1157d9 32%, #1259dd 47%, #0c5bd7 100%); font-family: var(--head); text-shadow: 1px 1px 1px #0a246a; }
+.sm-head .ico { border: 2px solid #d8e4f8; border-radius: 4px; }
+.sm-right { background: #d3e5fa; border-left: 1px solid #95bdee; }
+.sm-item { border-radius: 0; font-size: 14px; }
+.sm-item:hover, .sm-item:focus-visible { color: #fff; background: #316ac5; }
+.sm-foot { background: linear-gradient(180deg, #4282d6, #3b6fc9); border-top: 0; }
+.sm-foot a { color: #fff; }
+
+/* ---------- Tray balloon and boot screen ---------- */
+.balloon { color: #000; background: #ffffe1; border: 1px solid #000; border-radius: 8px; box-shadow: 2px 3px 8px rgba(0, 0, 0, 0.4); }
+.balloon::after { content: ""; position: absolute; right: 26px; bottom: -9px; width: 14px; height: 14px; background: #ffffe1; border: solid #000; border-width: 0 1px 1px 0; transform: rotate(45deg); }
+.balloon-x:hover { background: #f0f0c8; }
+.boot { background: #000; }
+.boot-bar { border: 2px solid #b2b2b2; border-radius: 6px; }
