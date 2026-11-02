@@ -298,6 +298,7 @@
         t.classList.toggle("is-min", w._s === "min");
       });
       root.classList.toggle("empty-desk", !openWins().length);
+      root.classList.remove("app-open");
       return;
     }
     var id = current && current.id;
@@ -306,6 +307,7 @@
       t.setAttribute("aria-current", id && appOf(t.getAttribute("href")) === id ? "true" : "false");
     });
     if (empty) empty.hidden = !!current;
+    root.classList.toggle("app-open", !!current);
   }
 
   /* ----- Single-window mode (narrow screens) ----- */
@@ -342,7 +344,9 @@
     var b = bounds(), d = DEF[w.id] || [860, 560];
     var gw = Math.max(360, Math.min(d[0], b.w - 150));
     var gh = Math.max(260, Math.min(d[1], b.h - 28));
+    w._pref = { w: d[0], h: d[1] };
     w._g = { w: gw, h: gh, x: Math.min(140 + i * 30, Math.max(0, b.w - gw - 12)), y: Math.min(22 + i * 28, Math.max(0, b.h - gh - 12)) };
+    w._home = { x: w._g.x, y: w._g.y };
     apply(w);
   }
   function front(w) {
@@ -393,6 +397,7 @@
     if (reduce) done(); else { w.classList.add("minimizing"); w._t = setTimeout(done, 190); }
     sync();
   }
+  var savedOpen = null;
   function enterWM(startId) {
     wm = true;
     root.classList.add("wm");
@@ -403,14 +408,16 @@
       w.classList.remove("max", "opening", "minimizing");
       w.hidden = true;
       w._s = "closed";
-      if (!w._g) place(w, i); else apply(w);
+      if (!w._g) place(w, i); else fit(w, bounds());
     });
+    if (savedOpen) { savedOpen.forEach(function (id) { if (id !== startId) wmOpen(id, { quiet: true }); }); savedOpen = null; }
     $$(".titlebar").forEach(function (t) { t.tabIndex = 0; t.title = "Drag to move. Arrow keys also move the window; Enter maximizes."; });
     if (startId) wmOpen(startId, { quiet: true }); else sync();
     window.scrollTo(0, 0);
   }
   function exitWM() {
     var id = active ? active.id : null;
+    savedOpen = openWins().sort(function (a, b) { return (parseInt(a.style.zIndex, 10) || 0) - (parseInt(b.style.zIndex, 10) || 0); }).map(function (x) { return x.id; });
     wm = false;
     active = null;
     root.classList.remove("wm", "empty-desk");
@@ -535,6 +542,7 @@
       function move(ev) {
         g.x = clamp(ox + ev.clientX - sx, 80 - g.w, b.w - 80);
         g.y = clamp(oy + ev.clientY - sy, 0, b.h - 40);
+        w._home = { x: g.x, y: g.y };
         apply(w);
       }
       function up() {
@@ -561,6 +569,7 @@
         e.preventDefault();
         g.x = clamp(g.x, 80 - g.w, b.w - 80);
         g.y = clamp(g.y, 0, b.h - 40);
+        w._home = { x: g.x, y: g.y };
         apply(w);
       } else if (e.key === "Enter") { e.preventDefault(); setMax(w, !w.classList.contains("max")); }
     });
@@ -578,6 +587,7 @@
       function move(ev) {
         g.w = clamp(ow + ev.clientX - sx, 360, Math.max(360, b.w - g.x));
         g.h = clamp(oh + ev.clientY - sy, 260, Math.max(260, b.h - g.y));
+        w._pref = { w: g.w, h: g.h };
         apply(w);
       }
       function up() {
@@ -592,15 +602,21 @@
     });
   }
 
+  /* keep every window fully on screen when the browser is resized; each regains its preferred size when there is room */
+  function fit(w, b) {
+    var g = w._g, p = w._pref || { w: g.w, h: g.h };
+    g.w = Math.min(p.w, Math.max(300, b.w - 16));
+    g.h = Math.min(p.h, Math.max(220, b.h - 16));
+    var hx = Math.max(0, b.w - g.w - 8), hy = Math.max(0, b.h - g.h - 8);
+    var home = w._home || { x: g.x, y: g.y };
+    g.x = clamp(home.x, Math.min(8, hx), hx);
+    g.y = clamp(home.y, Math.min(8, hy), hy);
+    apply(w);
+  }
   window.addEventListener("resize", function () {
     if (!wm) return;
     var b = bounds();
-    wins.forEach(function (w) {
-      if (!w._g) return;
-      w._g.x = clamp(w._g.x, 80 - w._g.w, b.w - 80);
-      w._g.y = clamp(w._g.y, 0, Math.max(0, b.h - 40));
-      apply(w);
-    });
+    wins.forEach(function (w) { if (w._g) fit(w, b); });
   });
 
   /* ----- Desktop icons: click selects, double-click opens (a single tap opens on touch) ----- */

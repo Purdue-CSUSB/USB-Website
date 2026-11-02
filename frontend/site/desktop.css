@@ -401,3 +401,22 @@ html.crt-on .crt { display: block; }
 .alumni li:nth-child(4n) .avatar { background: linear-gradient(160deg, #f3a0a0, #cf3a3a); }
 
 /* About Us: mission across the full width; objectives in a row beneath (see .about / .obj above) */
+
+/* ---------- Narrow screens and phones: the open window fills the screen above the taskbar ---------- */
+html:not(.wm).app-open body { height: 100vh; height: 100dvh; padding-bottom: 0; overflow: hidden; }
+html:not(.wm).app-open .desk { padding: 0; gap: 0; }
+html:not(.wm).app-open .desk > nav, html:not(.wm).app-open .foot, html:not(.wm).app-open .empty, html:not(.wm).app-open .balloon { display: none; }
+html:not(.wm).app-open .stack { max-width: none; }
+html:not(.wm).app-open .win:not([hidden]) { position: fixed; inset: 0 0 var(--task-h) 0; z-index: 800; width: auto; max-width: none; border-radius: 0; box-shadow: none; }
+html:not(.wm).app-open .win .grip { display: none; }
+/* touch screens: bigger window buttons and taskbar targets */
+@media (pointer: coarse) {
+  .ctl button { width: 32px; height: 32px; }
+  .task, .tbtn { min-height: 36px; }
+  .mb { padding: 8px 12px; }
+  .menu button { padding: 9px 22px 9px 24px; }
+}
+@media (max-width: 520px) {
+  .content { padding: 14px 14px; }
+  .icons { justify-content: center; }
+}
