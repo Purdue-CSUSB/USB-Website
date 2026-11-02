@@ -78,12 +78,13 @@
     node.classList.add("sel");
     if (node.tagName === "BUTTON") node.setAttribute("aria-pressed", "true");
   }
-  function renderBoard() {
-    var r = data.roster || {};
+  function renderBoard(r) {
+    r = r || data.roster || {};
     var list = $("#members");
     var members = r.members || [];
     var w = byId.board;
     if (list) {
+      list.textContent = "";
       members.forEach(function (m) {
         var li = el("li");
         var b = el("button", "", "item");
@@ -119,6 +120,8 @@
         li.appendChild(b);
         list.appendChild(li);
       });
+      if (list._wired) return renderFormer(r);
+      list._wired = true;
       list.addEventListener("click", function (e) {
         var b = e.target.closest(".item");
         if (!b) return;
@@ -144,8 +147,12 @@
         setStatus(w, b.dataset.name);
       });
     }
+    renderFormer(r);
+  }
+  function renderFormer(r) {
     var ul = $(".alumni");
     if (ul) {
+      ul.textContent = "";
       (r.former || []).forEach(function (m) {
         var li = el("li");
         var av = el("span", "", "avatar");
@@ -166,10 +173,11 @@
     if (!(h >= 0)) return "";
     return h < 24 ? h + " hours ago" : Math.floor(h / 24) + " days ago";
   }
-  function renderPosts() {
+  function renderPosts(posts) {
     var box = $(".slides");
     if (!box) return;
-    (data.posts || []).forEach(function (p) {
+    box.textContent = "";
+    (posts || data.posts || []).forEach(function (p) {
       var a = el("article", "", "post");
       var head = el("header", "", "post-head");
       head.innerHTML = '<img class="brandimg" src="assets/brand/usb-icon.webp" alt="" width="30" height="30">' + "<div><strong>purdueusb</strong><span>Purdue USB</span></div>";
@@ -202,6 +210,8 @@
     });
     function by(dir) { box.scrollBy({ left: dir * box.clientWidth * 0.85, behavior: reduce ? "auto" : "smooth" }); }
     var prev = $("#prev"), next = $("#next");
+    if (box._wired) return;
+    box._wired = true;
     if (prev) prev.addEventListener("click", function () { by(-1); });
     if (next) next.addEventListener("click", function () { by(1); });
   }
@@ -722,6 +732,64 @@
   crtSet(crtPref !== "off", false);
   if (crtBtn) crtBtn.addEventListener("click", function () { crtSet(!root.classList.contains("crt-on"), true); });
 
+
+  /* ----- Live data: the page paints from the bundled snapshot (data.js), then swaps in the same sources the React site uses.
+     Any failure leaves the snapshot in place. ----- */
+  function getJson(url, ms) {
+    var ctl = window.AbortController ? new AbortController() : null;
+    var timer = ctl ? setTimeout(function () { ctl.abort(); }, ms || 8000) : null;
+    return fetch(url, { credentials: "omit", signal: ctl ? ctl.signal : undefined }).then(function (res) {
+      if (timer) clearTimeout(timer);
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      return res.json();
+    });
+  }
+  function liveBoard() {
+    return getJson("/Board Member Photos/board-members.json").then(function (b) {
+      if (!b || !Array.isArray(b.members) || !b.members.length) throw new Error("no members");
+      var ov = data.overrides || {};
+      var members = b.members.map(function (m) {
+        var o = ov[m.name] || {};
+        return {
+          name: m.name,
+          title: o.title || m.title || "",
+          "class": m["class"] || "",
+          site: o.site || m.site || "",
+          photo: m.srcBase || "",
+          initiatives: o.initiatives
+        };
+      });
+      var former = (b.alumni || []).map(function (m) { return { name: m.name, title: m.title || "", "class": m["class"] || "", site: m.site || "" }; });
+      renderBoard({ members: members, former: former });
+      var w = byId.board;
+      if (w) setStatus(w, members.length + " object(s)");
+    });
+  }
+  function livePosts() {
+    function map(rows) {
+      return (Array.isArray(rows) ? rows : []).map(function (p) {
+        return { id: p.id, caption: p.caption || "", timestamp: p.timestamp, permalink: p.permalink || "https://www.instagram.com/purdueusb/",
+          eventTitle: p.eventTitle, image: p.imageUrl || p.image || null, w: p.width || p.w, h: p.height || p.h };
+      }).filter(function (p) { return p.image; }).slice(0, 6);
+    }
+    return getJson("/api/instagram/posts").then(function (d) {
+      var posts = map(d && d.posts);
+      if (!posts.length) throw new Error("API returned no posts");
+      return posts;
+    }).catch(function () {
+      return getJson("/Instagram Posts/insta_posts.json").then(function (d) {
+        var posts = map(d);
+        if (!posts.length) throw new Error("no fallback posts");
+        return posts;
+      });
+    }).then(function (posts) { renderPosts(posts); });
+  }
+  function loadLive() {
+    if (!/^https?:$/.test(location.protocol)) return;
+    liveBoard().catch(function () { /* keep the snapshot */ });
+    livePosts().catch(function () { /* keep the snapshot */ });
+  }
+
   /* ----- Start up ----- */
   function welcomeBalloon() {
     if (reduce) return;
@@ -730,6 +798,7 @@
   renderBoard();
   renderPosts();
   setupInitiatives();
+  loadLive();
   wins.forEach(buildChrome);
   wins.forEach(function (w) { w._s = "closed"; });
   var hashId = location.hash && byId[location.hash.slice(1)] ? location.hash.slice(1) : null;

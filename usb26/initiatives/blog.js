@@ -5,7 +5,8 @@
   var posts = Array.prototype.slice.call(document.querySelectorAll(".post"));
   var crumb = document.getElementById("crumb-page");
   function route() {
-    var slug = (location.hash || "").replace(/^#\/?/, "");
+    var fromPath = location.pathname.match(/\/initiatives\/blog\/([^\/]+)\/?$/);
+    var slug = (location.hash || "").replace(/^#\/?/, "") || (fromPath ? decodeURIComponent(fromPath[1]) : "");
     var hit = null;
     posts.forEach(function (p) {
       var on = p.getAttribute("data-slug") === slug;

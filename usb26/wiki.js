@@ -36,7 +36,8 @@
   });
 
   function route() {
-    var slug = (location.hash || "").replace(/^#\/?/, "");
+    var fromPath = location.pathname.match(/\/student-wiki\/([^\/]+)\/?$/);
+    var slug = (location.hash || "").replace(/^#\/?/, "") || (fromPath ? decodeURIComponent(fromPath[1]) : "");
     var hit = null;
     posts.forEach(function (p) {
       var on = p.getAttribute("data-slug") === slug;
