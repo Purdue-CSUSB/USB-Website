@@ -1,6 +1,6 @@
 /* Regenerates the pages whose content lives in the repo's frontend/public folder, so a new blog post or wiki article
    shows up on the next deploy: initiatives/blog.html, student-wiki.html (+ wiki-data.js), 404.html.
-   Run with `npm run content` (also part of `npm run build`). */
+   Runs as part of `npm run build` (or on its own: `node scripts/build-content.mjs`). */
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -9,8 +9,9 @@ import sharp from 'sharp';
 import { esc, shell } from './shell.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
-const SITE = path.resolve(HERE, '..');
-const PUB = path.resolve(SITE, '../frontend/public');
+const ROOT = path.resolve(HERE, '..');
+const SITE = path.join(ROOT, 'site');
+const PUB = path.join(ROOT, 'public');
 const read = (p) => fs.readFileSync(p, 'utf8');
 const write = (rel, text) => { fs.mkdirSync(path.dirname(path.join(SITE, rel)), { recursive: true }); fs.writeFileSync(path.join(SITE, rel), text); };
 

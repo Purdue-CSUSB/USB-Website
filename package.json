@@ -10,15 +10,13 @@
   "scripts": {
     "dev": "npm --prefix frontend run dev",
     "build": "npm --prefix frontend run build",
-    "vercel-build": "npm --prefix usb26 install --no-audit --no-fund && npm --prefix usb26 run build",
+    "vercel-build": "npm --prefix frontend install --include=dev --no-audit --no-fund && npm --prefix frontend run build",
     "lint": "npm --prefix frontend run lint",
     "optimize:photos": "npm --prefix frontend run optimize:photos",
     "seed:database": "python3 backend/seed_from_static.py",
     "keepalive": "python3 backend/keep_database_awake.py",
     "sync:instagram": "python3 backend/run_sync.py",
-    "sync:instagram:dry": "python3 backend/run_sync.py --dry-run",
-    "usb26:dev": "npm --prefix usb26 install --no-audit --no-fund && npm --prefix usb26 run dev",
-    "usb26:build": "npm --prefix usb26 run build"
+    "sync:instagram:dry": "python3 backend/run_sync.py --dry-run"
   },
   "dependencies": {
     "mongodb": "^7.5.0"

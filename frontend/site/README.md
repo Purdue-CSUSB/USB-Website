@@ -51,22 +51,23 @@ python3 -m http.server 8000
 - Former members are listed as text only (the live site shows photos for them too).
 - Image alt text for member avatars is empty because the name is shown right beside each photo.
 
-## Live data and deploying (this branch)
+## Live data and deploying
 
-`vercel.json` on this branch serves `usb26/dist` instead of the React app, so a deploy from `usb26` publishes this redesign.
-The existing `api/` functions, the MongoDB database and the daily Instagram sync workflow are unchanged and keep working.
+This is wired into the same deploy as the React site: Vercel still runs the root `npm run vercel-build` (which installs and builds `frontend/`) and serves `frontend/dist`, and the `api/` functions, MongoDB and the Instagram sync workflow are untouched.
+On this branch `frontend/` builds this redesign instead of the React app (`npm run build:react` / `npm run dev:react` still run the old one).
+
+What the build does (`frontend/scripts/build-site.mjs`): regenerates the blog, Student Wiki and 404 page from `frontend/public` (`build-content.mjs`), copies `public/` into `dist/` as before (board photos and roster, Instagram fallback posts, logos), then copies `site/` on top.
 
 | Piece | How it stays current |
 | --- | --- |
 | Instagram posts | Read in the browser from `/api/instagram/posts` (MongoDB, filled by the scraper), falling back to `Instagram Posts/insta_posts.json`, then to the snapshot in `data.js` |
 | Board roster, photos, former members | Read in the browser from `Board Member Photos/board-members.json` and `/board-photos/` (the files the React site uses), falling back to `data.js` |
-| Blog posts, Student Wiki | Regenerated from `frontend/public` on every build (`npm run content`), so a new markdown file plus its manifest entry appears on the next deploy |
-| Initiative pages (Mentorship, CS193, Club Hub, Help Room, ...) | Static HTML. Edit the page or re-convert it from the React source; Club Hub's club list and the Help Room TA schedule are copies |
+| Blog posts, Student Wiki | Regenerated on every build, so a new markdown file plus its manifest entry appears on the next deploy |
+| Initiative pages (Mentorship, CS193, Club Hub, Help Room, ...) | Static HTML in `site/initiatives/`. Edit the page by hand; Club Hub's club list and the Help Room TA schedule are copies |
 
-Not in the live files, kept in `data.js` as `overrides`: each member's initiatives list, the "Former President" and "Former Treasurer" titles (Maria Molina, Tristan Sze), and Chris McLoughlin's profile link. They are matched to the live roster by name.
+Kept in `data.js` as `overrides` (not in the live files): each member's initiatives, the "Former President" / "Former Treasurer" titles for Maria Molina and Tristan Sze, and Chris McLoughlin's profile link. They are matched to the live roster by name.
 
-Commands (from the repo root): `npm run usb26:build` builds `usb26/dist`; `npm run usb26:dev` builds and serves it at http://localhost:4026.
-`/api` needs MongoDB, so locally the pages use their fallbacks (set `USB_API_STUB=1` to answer the Instagram endpoint from the checked-in posts).
+`vercel.json` differs from the React version in three small ways, because this is a set of static pages instead of one single-page app: `cleanUrls`, two rewrites so old `/initiatives/blog/<slug>` and `/student-wiki/<slug>` links open the article, and redirects for `/contact` and `/initiatives`. The catch-all rewrite to `index.html` is gone (unknown paths get `404.html`), and `/assets/` is no longer cached as immutable because these files are not content-hashed.
 
+Local preview: `cd frontend && npm install && npm run dev` builds and serves http://localhost:4026. `/api` needs MongoDB, so locally the pages use their fallbacks (set `USB_API_STUB=1` to answer the Instagram endpoint from the checked-in posts).
 The scheduled Instagram sync only runs from the repository's default branch, so keep `.github/workflows/instagram-sync.yml` there.
-Old React URLs keep working: `/initiatives/<name>`, `/initiatives/blog/<slug>`, `/student-wiki/<slug>`, `/contact` (opens the Contact window) and `/initiatives` (opens the Initiatives folder).
