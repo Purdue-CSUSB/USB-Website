@@ -17,6 +17,38 @@
     return a;
   }
 
+
+  /* Flat retro desktop PC for the popup banner: beige CRT, tower, keyboard and mouse. */
+  var PC = '<svg class="rc-pc" viewBox="0 0 150 110" focusable="false">' +
+    '<defs><linearGradient id="rcp-bliss" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2f6fe0"/><stop offset=".55" stop-color="#a9d6ff"/><stop offset=".56" stop-color="#74c04f"/><stop offset="1" stop-color="#3b8f2c"/></linearGradient>' +
+    '<linearGradient id="rcp-beige" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f1ecda"/><stop offset="1" stop-color="#d8d1b8"/></linearGradient>' +
+    '<clipPath id="rcp-clip"><rect x="49" y="15" width="58" height="40" rx="6"/></clipPath></defs>' +
+    '<ellipse class="rc-shadow" cx="75" cy="105" rx="62" ry="4" fill="#1d4a12" opacity=".3"/>' +
+    '<g class="rc-pcbob">' +
+      /* tower */
+      '<rect x="6" y="32" width="28" height="68" rx="3" fill="url(#rcp-beige)" stroke="#8a8470" stroke-width="1.2"/>' +
+      '<rect x="11" y="40" width="18" height="4" rx="1" fill="#6f6a58"/><rect x="11" y="49" width="18" height="2.5" rx="1" fill="#6f6a58"/>' +
+      '<rect x="11" y="56" width="18" height="2.5" rx="1" fill="#9a947e"/>' +
+      '<circle cx="14" cy="90" r="2.6" fill="#c9c3ab" stroke="#8a8470"/><circle cx="24" cy="90" r="1.6" fill="#4cc23a"/>' +
+      /* CRT monitor */
+      '<rect x="42" y="6" width="74" height="62" rx="8" fill="url(#rcp-beige)" stroke="#8a8470" stroke-width="1.2"/>' +
+      '<rect x="46" y="11" width="66" height="48" rx="5" fill="#3b3a34"/>' +
+      '<g clip-path="url(#rcp-clip)"><rect x="49" y="15" width="58" height="40" fill="url(#rcp-bliss)"/>' +
+        '<rect x="54" y="20" width="26" height="9" rx="1" fill="#ece9d8" stroke="#0a246a" stroke-width=".8"/><rect x="54" y="20" width="26" height="2.6" fill="#0a3fd8"/>' +
+        '<rect x="57" y="25" width="14" height="1.4" fill="#7f95c4"/>' +
+        '<rect class="rc-cur" x="73" y="24.6" width="3" height="2.2" fill="#0a246a"/>' +
+        '<path d="M49 15h26l-14 40h-12z" fill="#fff" opacity=".12"/></g>' +
+      '<rect x="49" y="15" width="58" height="40" rx="6" fill="none" stroke="#1d1c18" stroke-width="1.2"/>' +
+      '<rect x="60" y="62" width="20" height="2.4" rx="1" fill="#f2b933"/><circle cx="104" cy="63" r="1.8" fill="#4cc23a"/>' +
+      '<rect x="56" y="68" width="42" height="5" fill="#cfc8ae" stroke="#8a8470"/><rect x="48" y="73" width="58" height="6" rx="3" fill="url(#rcp-beige)" stroke="#8a8470"/>' +
+      /* keyboard and mouse */
+      '<rect x="40" y="86" width="78" height="16" rx="2.5" fill="url(#rcp-beige)" stroke="#8a8470" stroke-width="1.2"/>' +
+      '<g stroke="#9a947e" stroke-width="2.4" stroke-dasharray="3.6 1.4" stroke-linecap="round"><line x1="44" y1="90" x2="114" y2="90"/><line x1="44" y1="94" x2="114" y2="94"/></g>' +
+      '<rect x="60" y="97" width="38" height="3" rx="1" fill="#b9b299"/>' +
+      '<path d="M118 94c8 0 8 4 12 4" fill="none" stroke="#8a8470" stroke-width="1"/>' +
+      '<rect x="126" y="92" width="12" height="16" rx="6" fill="url(#rcp-beige)" stroke="#8a8470" stroke-width="1.2"/><path d="M132 92v7" stroke="#8a8470"/>' +
+    '</g></svg>';
+
   var back = null, opener = null;
   function remember() { try { sessionStorage.setItem("usb-recruit", "1"); } catch (e) { /* ignore */ } }
   function close() {
@@ -90,7 +122,7 @@
     var hero = el("div", "", "rc-hero");
     hero.setAttribute("aria-hidden", "true");
     hero.innerHTML = '<span class="rc-spark s1"></span><span class="rc-spark s2"></span><span class="rc-spark s3"></span>' +
-      '<svg class="rc-people"><use href="#i-people"/></svg>';
+      PC;
     dlg.appendChild(hero);
 
     var body = el("div", "", "rc-body");
