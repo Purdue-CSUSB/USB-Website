@@ -363,3 +363,15 @@ html.crt-on .crt { display: block; }
 .md pre { overflow-x: auto; padding: 10px 14px; background: #f4f2e8; border: 1px solid #c9c3ad; }
 .md pre code { background: none; padding: 0; }
 .md table { display: block; overflow-x: auto; }
+
+/* ----- Recruiting page ----- */
+.rp-time { margin: 0 0 16px; padding: 0; list-style: none; background: #fff; border: 2px groove #c9d6f2; }
+.rp-time li { display: flex; gap: 14px; padding: 8px 14px; border-bottom: 1px solid #dfe6f5; }
+.rp-time li:last-child { border-bottom: 0; }
+.rp-time b { flex: none; width: 110px; color: var(--navy); }
+.rp-apply { display: inline-block; padding: 10px 22px; color: #fff; font: 700 16px var(--sans); text-decoration: none; background: var(--bar); border: 2px outset #8fb0f5; }
+.rp-apply:visited { color: #fff; }
+.rp-apply:hover { background: #1d4fd8; }
+.rp-faq details { margin: 0 0 8px; background: #fff; border: 2px groove #c9d6f2; }
+.rp-faq summary { padding: 7px 12px; font-weight: 700; cursor: pointer; }
+.rp-faq details p { margin: 0; padding: 0 12px 10px; }
