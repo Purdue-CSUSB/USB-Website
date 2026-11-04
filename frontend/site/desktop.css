@@ -433,3 +433,24 @@ html:not(.wm).app-open .win .grip { display: none; }
 .rc-time li:last-child { border-bottom: 0; }
 .rc-time b { flex: none; width: 90px; color: #0a246a; }
 .rc-btns { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+
+/* Recruiting popup: friendly header and motion */
+.rc { animation: rc-pop 0.35s cubic-bezier(0.2, 1.3, 0.4, 1); }
+@keyframes rc-pop { from { opacity: 0; transform: translateY(12px) scale(0.92); } }
+.rc-hero { position: relative; flex: none; height: 84px; overflow: hidden; background: linear-gradient(180deg, #8fc4ff 0%, #d7ecff 70%, #7cc15a 71%, #4f9e34 100%); border-bottom: 1px solid #0a246a; }
+.rc-people { position: absolute; left: 50%; bottom: 6px; width: 64px; height: 64px; margin-left: -32px; filter: drop-shadow(0 3px 2px rgba(0, 0, 0, 0.25)); animation: rc-bob 1.8s ease-in-out infinite; transform-origin: 50% 100%; }
+@keyframes rc-bob { 0%, 100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-9px) rotate(3deg); } }
+.rc-spark { position: absolute; width: 14px; height: 14px; background: #fff3a8; clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%); animation: rc-twinkle 1.6s ease-in-out infinite; }
+.rc-spark.s1 { left: 28%; top: 14px; }
+.rc-spark.s2 { left: 66%; top: 22px; width: 10px; height: 10px; animation-delay: 0.5s; }
+.rc-spark.s3 { left: 76%; top: 8px; width: 16px; height: 16px; animation-delay: 1s; }
+@keyframes rc-twinkle { 0%, 100% { opacity: 0.2; transform: scale(0.6) rotate(0); } 50% { opacity: 1; transform: scale(1.15) rotate(25deg); } }
+.rc-call { text-align: center; }
+.rc-body > p:not(.rc-call) { text-align: center; }
+
+/* Pointer to the tray icon after the popup is closed */
+.balloon.rc-tip::after { right: var(--tail, 26px); }
+.tray-btn.rc-pulse { animation: rc-pulse 1.1s ease-in-out infinite; border-radius: 3px; }
+@keyframes rc-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(255, 224, 80, 0.9); } 50% { box-shadow: 0 0 0 6px rgba(255, 224, 80, 0); background: rgba(255, 255, 255, 0.25); } }
+@media (prefers-reduced-motion: reduce) { .rc, .rc-people, .rc-spark, .tray-btn.rc-pulse { animation: none; } .rc-spark { opacity: 0.8; } }
+@media (max-width: 520px) { .tray .tray-btn[aria-label="Recruiting"] .ico { display: block; } }

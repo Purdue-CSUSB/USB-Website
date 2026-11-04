@@ -26,6 +26,35 @@
     back = null;
     remember();
     if (opener && opener.focus) opener.focus();
+    tip();
+  }
+  /* After the first close, point at the tray icon so people know how to get it back. */
+  var tipShown = false, tipTimer = 0;
+  function tip() {
+    var btn = document.querySelector(".tray-btn[aria-label=Recruiting]");
+    if (tipShown || !btn) return;
+    tipShown = true;
+    var old = document.querySelector(".balloon");
+    if (old) old.remove();
+    var b = el("div", "", "balloon rc-tip");
+    b.setAttribute("role", "status");
+    var r = btn.getBoundingClientRect();
+    b.style.setProperty("--tail", Math.max(10, Math.round(window.innerWidth - (r.left + r.width / 2) - 12 - 7)) + "px");
+    var x = el("button", "×", "balloon-x");
+    x.type = "button";
+    x.setAttribute("aria-label", "Dismiss");
+    var h = el("strong");
+    h.innerHTML = '<svg class="ico" aria-hidden="true"><use href="#i-people"/></svg>';
+    h.appendChild(document.createTextNode("Changed your mind?"));
+    b.appendChild(x);
+    b.appendChild(h);
+    b.appendChild(el("p", "Click the recruiting icon down here any time to bring this back."));
+    document.body.appendChild(b);
+    btn.classList.add("rc-pulse");
+    function done() { clearTimeout(tipTimer); b.remove(); btn.classList.remove("rc-pulse"); }
+    tipTimer = setTimeout(done, 10000);
+    x.addEventListener("click", done);
+    btn.addEventListener("click", done, { once: true });
   }
   function key(e) {
     if (e.key === "Escape") { e.stopPropagation(); close(); return; }
@@ -57,6 +86,12 @@
     ctl.appendChild(x);
     bar.appendChild(ctl);
     dlg.appendChild(bar);
+
+    var hero = el("div", "", "rc-hero");
+    hero.setAttribute("aria-hidden", "true");
+    hero.innerHTML = '<span class="rc-spark s1"></span><span class="rc-spark s2"></span><span class="rc-spark s3"></span>' +
+      '<svg class="rc-people"><use href="#i-people"/></svg>';
+    dlg.appendChild(hero);
 
     var body = el("div", "", "rc-body");
     body.appendChild(el("p", cfg.callout, "rc-call"));
