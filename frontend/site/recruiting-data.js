@@ -20,7 +20,7 @@ window.USB_RECRUITING = {
   faqs: [
     { q: "Who can apply?", a: "Any Purdue CS, DS or AI student. We recruit across all class years." },
     { q: "How much time does it take?", a: "TBA" },
-    { q: "Which initiatives can I join?", a: "See the Initiatives folder on the homepage for everything the board runs." }
+    { q: "Can I choose what I work on?", a: "TBA" }
   ],
   contact: "usb@cs.purdue.edu"
 };

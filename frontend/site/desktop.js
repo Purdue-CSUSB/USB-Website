@@ -82,6 +82,8 @@
     r = r || data.roster || {};
     var list = $("#members");
     var members = r.members || [];
+    var bc = $("#board-count");
+    if (bc && members.length) bc.textContent = members.length;
     var w = byId.board;
     if (list) {
       list.textContent = "";
@@ -247,11 +249,32 @@
     });
   }
 
-  /* ----- Contact form (preview: nothing is sent) ----- */
+  /* ----- Contact form: posts to the Google Apps Script in contact-config.js (it adds a row to a Google Sheet and emails the board).
+     Until an endpoint is set, or if sending fails, the visitor sees a calm notice with the USB address; nothing is thrown. ----- */
   var form = $("#cform");
   if (form) form.addEventListener("submit", function (e) {
     e.preventDefault();
-    notice("Design preview", "Messages are not sent from this preview. On the real site this form posts to Formspree.", 7000);
+    var cfg = window.USB_CONTACT || {};
+    var win = byId.contact;
+    function later() {
+      notice("Contact form", "Messages can't be sent from here just yet. Please email " + (cfg.email || "usb@cs.purdue.edu") + ".", 9000);
+    }
+    if (!cfg.endpoint || !window.fetch || !window.URLSearchParams) { later(); return; }
+    var btns = $$("button[type=submit]", form).concat($$(".tsend"));
+    function busy(on) { btns.forEach(function (b) { b.disabled = on; }); if (win) setStatus(win, on ? "Sending..." : "Ready"); }
+    busy(true);
+    var body;
+    try { body = new URLSearchParams(new FormData(form)); } catch (err) { busy(false); later(); return; }
+    fetch(cfg.endpoint, { method: "POST", body: body })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (!d || d.result !== "success") throw new Error("not saved");
+        form.reset();
+        busy(false);
+        if (win) setStatus(win, "Message sent");
+        notice("Message sent", "Thanks! The board will get back to you at the email you gave.", 9000);
+      })
+      .catch(function () { busy(false); later(); });
   });
   var yr = $("#year");
   if (yr) yr.textContent = new Date().getFullYear();
@@ -429,6 +452,13 @@
     });
     $$(".titlebar").forEach(function (t) { t.removeAttribute("tabindex"); t.removeAttribute("title"); });
     if (id) openApp(id, { quiet: true, history: false }); else sync();
+  }
+  /* Tip in the About window: shows on every visit; the x only hides it until the next load. */
+  var tipEl = $("#starttip");
+  if (tipEl) {
+    var act = $(".tip-act", tipEl);
+    if (act && coarse) act.textContent = "Tap";
+    $("#tipx").addEventListener("click", function () { tipEl.hidden = true; });
   }
   function openAny(id, o) { if (wm) wmOpen(id, o); else openApp(id, o); }
   function closeWin(w) { if (wm) wmHide(w, "closed"); else closeApp(); }
@@ -626,6 +656,13 @@
     if (id) openAny(id, { focus: true });
     else go(href, i.textContent.trim());  // shortcut icons: pages outside the desktop windows
   }
+  /* In-page links that open a desktop window (About Us overview, Meet the Board note). */
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest && e.target.closest("a[data-open]");
+    if (!a || !byId[a.dataset.open]) return;
+    e.preventDefault();
+    openAny(a.dataset.open, { focus: true });
+  });
   icons.forEach(function (i) {
     i.addEventListener("click", function (e) {
       e.preventDefault();
@@ -818,10 +855,10 @@
   wins.forEach(buildChrome);
   wins.forEach(function (w) { w._s = "closed"; });
   var hashId = location.hash && byId[location.hash.slice(1)] ? location.hash.slice(1) : null;
-  if (mq.matches) enterWM(hashId); else if (hashId) openApp(hashId, { history: false, quiet: true }); else { wins.forEach(function (w) { w.hidden = true; }); sync(); }
+  if (mq.matches) enterWM(hashId || "about"); else if (hashId) openApp(hashId, { history: false, quiet: true }); else { wins.forEach(function (w) { w.hidden = true; }); sync(); }
   requestAnimationFrame(function () { window.scrollTo(0, 0); });
   var onMq = function (e) { if (e.matches && !wm) enterWM(current ? current.id : null); else if (!e.matches && wm) exitWM(); };
   if (mq.addEventListener) mq.addEventListener("change", onMq); else mq.addListener(onMq);
   if (!wm && current) replay(current);
-  if (!store("usb-balloon")) { store("usb-balloon", "1"); setTimeout(welcomeBalloon, 900); }
+  if (!wm && !store("usb-balloon")) { store("usb-balloon", "1"); setTimeout(welcomeBalloon, 900); }
 })();
