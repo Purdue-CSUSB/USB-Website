@@ -420,3 +420,19 @@ html:not(.wm).app-open .win .grip { display: none; }
   .content { padding: 14px 14px; }
   .icons { justify-content: center; }
 }
+
+/* First-visit tip in the About window */
+.tip { display: flex; align-items: center; gap: 10px; margin: 0 0 12px; padding: 9px 12px; color: #000; font-size: 14px; line-height: 1.4; background: #fff7c2; border: 1px solid #b8860b; border-left: 6px solid #f2b933; }
+.tip[hidden], html:not(.wm) .tip { display: none; }
+.tip-arrow { flex: none; color: #0a3fd8; font-size: 18px; animation: tip-nudge 1.1s ease-in-out infinite; }
+.tip-txt { flex: 1; }
+.tip-act { font-weight: 700; color: #0a246a; }
+.tip-x { flex: none; width: 24px; height: 24px; padding: 0; background: none; border: 0; font: 700 20px/1 var(--font); cursor: default; }
+.tip-x:hover { background: rgba(0, 0, 0, 0.08); }
+@keyframes tip-nudge { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(-6px); } }
+@media (prefers-reduced-motion: reduce) { .tip-arrow { animation: none; } }
+
+/* About Us: board note */
+.boardnote { margin: 10px 0 14px; padding: 7px 10px; font-size: 14px; background: #eef3fd; border-left: 4px solid #0a3fd8; }
+
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }

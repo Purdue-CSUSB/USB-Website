@@ -37,23 +37,15 @@
     <!-- About Us: the landing page -->
     <section class="win" id="about" data-task="About Us" data-icon="i-info" data-address="About Us" data-tools="" data-status="Ready" tabindex="-1" aria-labelledby="t-about">
       <div class="titlebar"><svg class="ico" aria-hidden="true"><use href="#i-info"/></svg><h2 class="title" id="t-about">About Us</h2></div>
-      <div class="win-inner"><div class="xb">
-        <aside class="taskpane" aria-label="Quick links">
-          <details class="pbox" open>
-            <summary>Social Links</summary>
-            <ul>
-              <li><a href="https://www.instagram.com/purdueusb" target="_blank" rel="noopener"><i class="fab fa-instagram" aria-hidden="true"></i>Instagram</a></li>
-              <li><a href="https://www.linkedin.com/company/purdueusb/posts/?feedView=all" target="_blank" rel="noopener"><i class="fab fa-linkedin" aria-hidden="true"></i>LinkedIn</a></li>
-              <li><a href="https://github.com/Purdue-CSUSB" target="_blank" rel="noopener"><i class="fab fa-github" aria-hidden="true"></i>GitHub</a></li>
-            </ul>
-          </details>
-        </aside>
+      <div class="win-inner"><div class="xb solo">
         <div class="content">
+          <p class="tip" id="starttip" role="note"><span class="tip-arrow" aria-hidden="true">&#9664;</span><span class="tip-txt"><b>New here?</b> <span class="tip-act">Double-click</span> the icons on the left, like Initiatives, Meet the Board and Contact Us, to open them and start exploring.</span><button type="button" class="tip-x" id="tipx" aria-label="Dismiss tip">&times;</button></p>
           <div class="welcome">
             <div class="welcome-photo"><img src="assets/usb-group-2026.webp" alt="USB Group Photo 2026" width="1270" height="953"></div>
             <div class="welcome-main">
               <h1>Hello from USB!</h1>
               <p class="lede">The Computer Science Undergraduate Board is dedicated to improving the student experience for CS/DS/AI students at Purdue - whether by managing CS193, hosting forums for student advocacy, or maintaining a database of undergrad-tailored resources, USB is continually creating initiatives that will uphold our values.</p>
+              <p class="boardnote">This year's board is made up of <b><span id="board-count">24</span> students</b> who run everything on this site. Open <a href="#board" data-open="board">Meet the Board</a> to see who we are and which initiatives each of us works on.</p>
               <div class="actions">
                 <ul class="social">
                   <li><a class="btn sbtn" href="https://www.instagram.com/purdueusb" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram" aria-hidden="true"></i></a></li>
@@ -106,7 +98,7 @@
     <section class="win" id="contact" data-task="Contact Us" data-icon="i-mail" data-chrome="mail" data-tools="Send|#send|i-mail;Clear|#reset|i-doc" data-status="Ready" data-side="* Required" tabindex="-1" aria-labelledby="t-contact">
       <div class="titlebar"><svg class="ico" aria-hidden="true"><use href="#i-mail"/></svg><h2 class="title" id="t-contact">Contact Us</h2></div>
       <div class="win-inner"><div class="xb solo">
-        <form class="mail" id="cform" action="https://formspree.io/xrgyypqw" method="POST">
+        <form class="mail" id="cform">
           <div class="mail-head">
             <h1>What's on your mind?</h1>
             <p class="infobar">You can also send us an email at <a href="mailto:usb@cs.purdue.edu">usb@cs.purdue.edu</a><br><small>Note:</small> To report concerns in an official capacity, please go to the <a href="https://my.cs.purdue.edu/undergraduate/concern" target="_blank" rel="noopener">CS Concern Form</a>.</p>
@@ -120,6 +112,7 @@
             <label class="mmsg" for="c-message">Message <span class="req" aria-hidden="true">*</span></label>
             <textarea id="c-message" name="Message" placeholder="Questions, comments, concerns, suggestions — put 'em here!" required></textarea>
           </div>
+          <input type="text" name="hp_check" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
           <div class="mfoot">
             <label class="ack"><input type="checkbox" name="acknowledge" required><span>I acknowledge that my message is not guaranteed to be private and may be subject to Indiana mandatory reporting laws. <span class="req" aria-hidden="true">*</span></span></label>
             <button type="submit" class="btn default">Send</button>
@@ -244,6 +237,7 @@
   <div class="tray"><button type="button" class="tray-btn" id="crt" aria-pressed="true" title="CRT screen effect: on (click to turn off)" aria-label="CRT screen effect"><svg class="ico" aria-hidden="true"><use href="#i-monitor"/></svg></button><time id="clock"></time></div>
 </div>
 
+<script src="contact-config.js"></script>
 <script src="data.js"></script>
 <script src="desktop.js"></script>
 </body>

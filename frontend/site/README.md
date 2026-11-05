@@ -35,7 +35,7 @@ python3 -m http.server 8000
 
 ## How it behaves
 
-- Nothing is open at startup. Desktop icons: About Us, Meet the Board, Contact Us, Stay Connected, Initiatives, Student Wiki, Tutor List.
+- On screens at least 900x540 the About Us window opens at startup (with a tip about the icons); on smaller screens nothing is open so the icons show first. Desktop icons: About Us, Meet the Board, Contact Us, Stay Connected, Initiatives, Student Wiki, Tutor List.
 - Click selects, double-click opens (a single tap on touch). Windows drag, resize, minimize, maximize and close on wide screens; narrow screens show one window at a time.
 - The CRT texture is on by default; the monitor button in the tray turns it off (remembered per browser).
 
@@ -43,7 +43,7 @@ python3 -m http.server 8000
 
 - Research Resources: the log-in / sign-up dialogs and "Post a Project" do not connect to any backend; the calendar embeds the live Google Calendar.
 - `go()` in `desktop.js` shows a "Design preview" notice for pages that are not built here (initiative pages, Student Wiki).
-- The Contact form does not send anything; the submit handler shows a notice. The real site posts to Formspree.
+- The Contact form posts to a Google Apps Script that fills a Google Sheet (see "Contact form" below). Until `contact-config.js` has the script's URL, Send shows a notice with the USB email address.
 - `data.js` is a snapshot. The live site loads the roster from `board-members.json` and posts from `/api/instagram/posts`.
 
 ## Notes
@@ -71,3 +71,21 @@ Kept in `data.js` as `overrides` (not in the live files): each member's initiati
 
 Local preview: `cd frontend && npm install && npm run dev` builds and serves http://localhost:4026. `/api` needs MongoDB, so locally the pages use their fallbacks (set `USB_API_STUB=1` to answer the Instagram endpoint from the checked-in posts).
 The scheduled Instagram sync only runs from the repository's default branch, so keep `.github/workflows/instagram-sync.yml` there.
+
+## Contact form
+
+Contact Us posts to a Google Apps Script web app, which adds a row to a Google Sheet and emails the board.
+The code for it is `frontend/scripts/contact-sheet.gs`. The page reads the script's URL from `contact-config.js`.
+
+Set up (once, with a Google account that should own the Sheet, for example the USB account):
+
+1. Create a Google Sheet (any name). Open **Extensions > Apps Script**.
+2. Replace the editor's contents with `frontend/scripts/contact-sheet.gs`. Check `NOTIFY` (the inbox that also gets each message, or `''` for none). Save.
+3. **Deploy > New deployment > Web app.** Execute as: **Me**. Who has access: **Anyone**. Deploy and approve the permissions (Sheets, and Gmail for sending the notification).
+4. Copy the **Web app URL** (ends in `/exec`) into `endpoint` in `contact-config.js`, then commit and deploy the site.
+5. Send a test message from the site. A "Messages" tab is created in the Sheet on the first one.
+
+Notes:
+- After changing the script, use **Deploy > Manage deployments > Edit > New version** so the same URL keeps working.
+- The URL is public, as with any form endpoint, so the page includes a hidden spam-trap field. The Sheet is only visible to the people you share it with.
+- With `endpoint` empty, or if sending fails, Send shows a notice with the USB email address (no error is shown).
