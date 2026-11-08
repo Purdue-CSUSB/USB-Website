@@ -723,6 +723,7 @@
     var NS = "http://www.w3.org/2000/svg";
     // x, y (wallpaper coordinates), size, glide seconds, bob seconds, flap seconds
     var flock = [[640, 300, 1, 46, 6.5, 1.7], [690, 320, 0.8, 52, 7.5, 1.5], [1100, 230, 0.7, 40, 5.5, 1.4], [1140, 250, 0.6, 58, 8, 1.3], [1400, 420, 0.6, 44, 6, 1.35]];
+    var entries = [];
     var layer = document.createElementNS(NS, "svg");
     layer.setAttribute("class", "birds");
     layer.setAttribute("viewBox", "0 0 1920 1080");
@@ -758,12 +759,71 @@
         a.setAttribute("values", [wing(-14, -4, -9), rest, wing(-4, 3, -7), rest, wing(-14, -4, -9)].join(";"));
         p.appendChild(a);
       }
+      entries.push({ g: glide, p: p });
       at.appendChild(p);
       bob.appendChild(at);
       glide.appendChild(bob);
       layer.appendChild(glide);
     });
     document.body.insertBefore(layer, $(".desk"));
+
+    /* Easter egg: click a bird on the empty desktop and it explodes, then drifts back a few seconds later.
+       The birds sit behind the desktop layer, so clicks are tested against each bird's position instead. */
+    var SKIP = "a, button, input, textarea, select, summary, label, .win, .startmenu, .taskbar, .balloon";
+    function birdAt(e) {
+      if (e.target.closest && e.target.closest(SKIP)) return null;
+      for (var i = 0; i < entries.length; i++) {
+        var en = entries[i];
+        if (en.g.style.display === "none" || parseFloat(getComputedStyle(en.g).opacity) < 0.3) continue;
+        var r = en.p.getBoundingClientRect();
+        var pad = 14;
+        if (e.clientX >= r.left - pad && e.clientX <= r.right + pad && e.clientY >= r.top - pad && e.clientY <= r.bottom + pad) return en;
+      }
+      return null;
+    }
+    var COLORS = ["#27487d", "#f2b933", "#ff7a2f", "#fff3a8", "#ffffff", "#d9421b"];
+    function boom(x, y) {
+      var host = el("div", "", "boom");
+      host.setAttribute("aria-hidden", "true");
+      document.body.appendChild(host);
+      var flash = el("span", "", "boom-flash");
+      flash.style.left = x + "px";
+      flash.style.top = y + "px";
+      host.appendChild(flash);
+      flash.animate([{ transform: "translate(-50%, -50%) scale(0.2)", opacity: 1 }, { transform: "translate(-50%, -50%) scale(2.4)", opacity: 0 }], { duration: 480, easing: "ease-out", fill: "both" });
+      for (var i = 0; i < 18; i++) {
+        var f = el("span", "", i % 3 ? "boom-bit" : "boom-feather");
+        f.style.left = x + "px";
+        f.style.top = y + "px";
+        f.style.background = COLORS[i % COLORS.length];
+        host.appendChild(f);
+        var ang = Math.random() * Math.PI * 2, dist = 30 + Math.random() * 70;
+        f.animate([
+          { transform: "translate(-50%, -50%) rotate(0deg) scale(1)", opacity: 1 },
+          { transform: "translate(calc(-50% + " + Math.cos(ang) * dist + "px), calc(-50% + " + (Math.sin(ang) * dist + 40) + "px)) rotate(" + (Math.random() * 720 - 360) + "deg) scale(0.3)", opacity: 0 }
+        ], { duration: 650 + Math.random() * 450, easing: "cubic-bezier(0.2, 0.7, 0.4, 1)", fill: "both" });
+      }
+      setTimeout(function () { host.remove(); }, 1300);
+    }
+    document.addEventListener("click", function (e) {
+      var en = birdAt(e);
+      if (!en) return;
+      en.g.style.display = "none";
+      if (!reduce) boom(e.clientX, e.clientY);
+      setTimeout(function () { en.g.style.display = ""; }, 7000);
+      document.documentElement.classList.remove("bird-hover");
+      if (entries.every(function (b) { return b.g.style.display === "none"; })) {
+        notice("Bird watching", "You popped every bird in the sky. They'll be back shortly.", 6000);
+      }
+    });
+    var hoverRaf = 0;
+    document.addEventListener("mousemove", function (e) {
+      if (hoverRaf) return;
+      hoverRaf = requestAnimationFrame(function () {
+        hoverRaf = 0;
+        document.documentElement.classList.toggle("bird-hover", !!birdAt(e));
+      });
+    });
   })();
 
   /* ----- CRT screen effect (on by default; the tray button turns it off, and the choice is remembered) ----- */

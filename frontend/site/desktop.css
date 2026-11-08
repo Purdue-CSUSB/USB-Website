@@ -471,7 +471,13 @@ html:not(.wm).app-open .win .grip { display: none; }
 @keyframes tip-nudge { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(-6px); } }
 @media (prefers-reduced-motion: reduce) { .tip-arrow { animation: none; } }
 
-/* About Us: board note and site overview */
+/* About Us: board note */
 .boardnote { margin: 10px 0 14px; padding: 7px 10px; font-size: 14px; background: #eef3fd; border-left: 4px solid #0a3fd8; }
 
 .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+
+/* Bird easter egg */
+.boom { position: fixed; inset: 0; z-index: 2000; pointer-events: none; overflow: hidden; }
+.boom-flash { position: absolute; opacity: 0; width: 56px; height: 56px; border-radius: 50%; background: radial-gradient(circle, #fff 0%, #fff3a8 25%, #ffb02e 55%, rgba(255, 90, 20, 0) 72%); }
+.boom-bit { position: absolute; opacity: 0; width: 6px; height: 6px; }
+.boom-feather { position: absolute; opacity: 0; width: 5px; height: 12px; border-radius: 50% 50% 50% 50% / 70% 70% 30% 30%; }

@@ -3,60 +3,89 @@
   var c = window.USB_RECRUITING || {};
   var $ = function (id) { return document.getElementById(id); };
   function el(tag, text, cls) { var n = document.createElement(tag); if (text) n.textContent = text; if (cls) n.className = cls; return n; }
+  function icon(id) {
+    var s = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    s.setAttribute("class", "ico");
+    s.setAttribute("aria-hidden", "true");
+    var u = document.createElementNS("http://www.w3.org/2000/svg", "use");
+    u.setAttribute("href", "#" + id);
+    s.appendChild(u);
+    return s;
+  }
+
   $("rp-intro").textContent = c.intro || "";
-  $("rp-who").textContent = c.who || "";
+  var nx = c.next || {};
+  $("rp-next-title").textContent = nx.heading || "";
+  $("rp-when").textContent = [nx.when, nx.where].filter(Boolean).join(" · ");
+  $("rp-next-note").textContent = nx.note || "";
+
+  /* Apply buttons (hero and bottom) appear once an application link is set. */
+  ["rp-apply", "rp-apply2"].forEach(function (id) {
+    var a = $(id);
+    if (c.applyUrl) { a.href = c.applyUrl; a.textContent = (c.applyLabel || "Apply Now") + " »"; a.hidden = false; }
+  });
+  if (c.contact) $("rp-mail").href = "mailto:" + c.contact;
+
+  /* Steps */
+  var steps = $("rp-steps");
+  (c.steps || []).forEach(function (s) {
+    var li = el("li");
+    var ic = el("span", "", "rp-step-ico");
+    ic.appendChild(icon(s.i || "i-info"));
+    li.appendChild(ic);
+    li.appendChild(el("strong", s.t));
+    li.appendChild(el("span", s.d));
+    steps.appendChild(li);
+  });
+
+  /* Timeline: dates still to come are drawn muted */
   var ol = $("rp-time");
   (c.timeline || []).forEach(function (s) {
-    var li = el("li"); li.appendChild(el("b", s.date)); li.appendChild(el("span", s.label)); ol.appendChild(li);
+    var li = el("li", "", /^to be/i.test(s.date) ? "tba" : "");
+    li.appendChild(el("b", s.date));
+    li.appendChild(el("span", s.label));
+    ol.appendChild(li);
   });
+
   var faq = $("rp-faq");
   (c.faqs || []).forEach(function (f) {
     var d = el("details"); d.appendChild(el("summary", f.q)); d.appendChild(el("p", f.a)); faq.appendChild(d);
   });
-  var apply = $("rp-apply");
-  if (c.applyUrl) { apply.href = c.applyUrl; apply.hidden = false; } else { $("rp-soon").hidden = false; }
-  if (c.contact) { var m = $("rp-mail"); m.href = "mailto:" + c.contact; m.textContent = c.contact; }
 
-  /* Meet the Board: the snapshot in data.js first, then the live roster (same sources as the homepage). */
-  var list = $("rp-board");
-  function renderBoard(members) {
-    list.textContent = "";
-    members.forEach(function (m) {
-      var li = el("li");
-      var av = el("span", "", "rp-av");
-      if (m.photo) {
-        var pic = document.createElement("picture");
-        ["avif", "webp"].forEach(function (t) {
-          var s = document.createElement("source");
-          s.type = "image/" + t;
-          s.srcset = m.photo + "-256." + t + " 1x, " + m.photo + "-512." + t + " 2x";
-          pic.appendChild(s);
-        });
-        var im = document.createElement("img");
-        im.src = m.photo + "-256.webp"; im.alt = ""; im.width = 96; im.height = 96; im.loading = "lazy";
-        pic.appendChild(im);
-        av.appendChild(pic);
-      }
-      li.appendChild(av);
-      li.appendChild(el("strong", m.name));
-      var meta = [m.title, m["class"]].filter(Boolean).join(" · ");
-      if (meta) li.appendChild(el("span", meta, "rp-meta"));
-      var leads = (m.initiatives || []).filter(function (i) { return i.role === "Lead"; }).map(function (i) { return i.name; });
-      if (leads.length) li.appendChild(el("span", "Leads: " + leads.join(", "), "rp-leads"));
-      list.appendChild(li);
-    });
+  /* Hero countdown: until applications open, then until they close. It disappears after that. */
+  var ap = c.applications || {};
+  var opens = ap.opens ? new Date(ap.opens).getTime() : 0;
+  var closes = ap.closes ? new Date(ap.closes).getTime() : 0;
+  var box = $("rp-count");
+  function tick() {
+    var now = Date.now(), to = 0, label = "";
+    if (opens && now < opens) { to = opens; label = "Applications open in"; }
+    else if (closes && now < closes) { to = closes; label = "Applications close in"; }
+    if (!to) { box.hidden = true; return false; }
+    var secs = Math.floor((to - now) / 1000), m = Math.floor(secs / 60);
+    $("rp-count-label").textContent = label;
+    $("rp-d").textContent = Math.floor(m / 1440);
+    $("rp-h").textContent = Math.floor((m % 1440) / 60);
+    $("rp-m").textContent = m % 60;
+    $("rp-s").textContent = secs % 60;
+    box.hidden = false;
+    return true;
   }
-  var data = window.USB_DATA || {};
-  var snap = ((data.roster || {}).members || []).slice();
-  renderBoard(snap);
-  if (/^https?:$/.test(location.protocol)) {
-    fetch("/Board Member Photos/board-members.json").then(function (r) { if (!r.ok) throw 0; return r.json(); }).then(function (b) {
-      if (!b || !Array.isArray(b.members) || !b.members.length) return;
-      var ov = data.overrides || {};
-      renderBoard(b.members.map(function (m) {
-        var o = ov[m.name] || {};
-        return { name: m.name, title: o.title || m.title || "", "class": m["class"] || "", photo: m.srcBase || "", initiatives: o.initiatives };
-      }));
-    }).catch(function () { /* keep the snapshot */ });
+  if (tick()) setInterval(tick, 1000);
+
+  /* Next-up card: an add-to-calendar file for the callout; the card goes away once it has passed. */
+  if (nx.iso) {
+    var start = new Date(nx.iso).getTime();
+    if (!(start > Date.now())) document.querySelector(".rp-next").hidden = true;
+    if (nx.endIso && start > Date.now() && window.Blob && window.URL) {
+      var z = function (iso) { return new Date(iso).toISOString().replace(/[-:]|\.\d{3}/g, ""); };
+      var ics = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Purdue USB//Recruiting//EN", "BEGIN:VEVENT",
+        "UID:callout1-" + z(nx.iso) + "@purdueusb.com", "DTSTAMP:" + z(new Date().toISOString()),
+        "DTSTART:" + z(nx.iso), "DTEND:" + z(nx.endIso), "SUMMARY:Purdue USB " + (nx.heading || "Callout"),
+        "LOCATION:" + (nx.where || ""), "DESCRIPTION:Learn about Purdue USB and meet current board members.", "END:VEVENT", "END:VCALENDAR"].join("\r\n");
+      var cal = $("rp-cal");
+      cal.href = URL.createObjectURL(new Blob([ics], { type: "text/calendar" }));
+      cal.hidden = false;
+    }
   }
 })();
