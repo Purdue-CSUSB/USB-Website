@@ -15,7 +15,7 @@ window.USB_RECRUITING = {
   intro: "The Undergraduate Student Board is run by CS students, for CS students. We run CS193, host student forums and town halls, put on career panels and social events, and keep a set of resources for undergrads. Joining the board means helping make the CS experience at Purdue better.",
   steps: [
     { i: "i-people", t: "Come to a callout", d: "We hold two identical callouts. Attend at least one to have your application considered. You'll hear what USB does, meet current board members and get your questions answered." },
-    { i: "i-doc", t: "Apply", d: "Applications open November 19 and are due January 22. Remember that you need to attend at least one callout for your application to be considered." },
+    { i: "i-doc", t: "Apply", d: "Applications open November 19 and are due January 22. Be sure to attend at least one callout, or arrange a make-up with us if you can't make either." },
     { i: "i-chat", t: "Interview", d: "Selected applicants are invited to an individual interview and a group interview, plus a casual social with current board members." },
     { i: "i-mail", t: "Hear back", d: "We announce decisions once interviews wrap up." }
   ],
@@ -28,7 +28,7 @@ window.USB_RECRUITING = {
   ],
   faqs: [
     { q: "Do I have to attend a callout?", a: "Yes. Attend at least one of the two identical callouts to have your application considered." },
-    { q: "What if I can't make a callout?", a: "We value face time with prospective members, so please try your best to show up. If you truly can't make either one, email usb@cs.purdue.edu and we'll get you the callout information as a make-up." },
+    { q: "What if I can't make a callout?", a: "We value face time with prospective members, so please try your best to show up. If you truly can't make either one, email usb@cs.purdue.edu and we'll set up a make-up for you. Your application will still be fully considered." },
     { q: "What is the time commitment for USB?", a: "The commitment is flexible, but plan on at least 2 hours a week." },
     { q: "Can I choose what I work on?", a: "Most members are part of about three initiatives. You tell us on the application which initiative you'd most like to join and why, and members have a high likelihood of being placed in initiatives they prefer." },
     { q: "How do I stay up to date?", a: "Follow @purdueusb on Instagram. We post the application timeline and callout details there." }
