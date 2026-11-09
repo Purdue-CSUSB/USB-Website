@@ -28,7 +28,7 @@ window.USB_RECRUITING = {
   ],
   faqs: [
     { q: "Do I have to attend a callout?", a: "Yes. Attend at least one of the two identical callouts to have your application considered." },
-    { q: "What if I can't make a callout?", a: "We value face time with prospective members, so please try your best to show up. If you truly can't make either one, email usb@cs.purdue.edu and we'll set up a make-up for you. Your application will still be fully considered." },
+    { q: "What if I can't make a callout?", a: "We value face time with prospective members, so please try your best to show up. If you truly can't make either one, email usb@cs.purdue.edu. Your application will still be fully considered if you email in for a make-up." },
     { q: "What is the time commitment for USB?", a: "The commitment is flexible, but plan on at least 2 hours a week." },
     { q: "Can I choose what I work on?", a: "Most members are part of about three initiatives. You tell us on the application which initiative you'd most like to join and why, and members have a high likelihood of being placed in initiatives they prefer." },
     { q: "How do I stay up to date?", a: "Follow @purdueusb on Instagram. We post the application timeline and callout details there." }
