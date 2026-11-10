@@ -1,5 +1,5 @@
 /* Recruiting popup on the homepage. Content comes from recruiting-data.js.
-   Shown once per browser session; the tray icon and the Start menu entry reopen it. */
+   Shown once per browser session; the tray icon and the Start menu entry reopen it, and a tray tip points them out on later visits. */
 (function () {
   var cfg = window.USB_RECRUITING;
   if (!cfg || !cfg.enabled) return;
@@ -60,9 +60,10 @@
     if (opener && opener.focus) opener.focus();
     tip();
   }
-  /* After the first close, point at the tray icon so people know how to get it back. */
+  /* Point at the tray icon so people know how to get the popup back: after the first close,
+     and again when they return to the desktop later in the same session. */
   var tipShown = false, tipTimer = 0;
-  function tip() {
+  function tip(heading, text) {
     var btn = document.querySelector(".tray-btn[aria-label=Recruiting]");
     if (tipShown || !btn) return;
     tipShown = true;
@@ -77,10 +78,10 @@
     x.setAttribute("aria-label", "Dismiss");
     var h = el("strong");
     h.innerHTML = '<svg class="ico" aria-hidden="true"><use href="#i-people"/></svg>';
-    h.appendChild(document.createTextNode("Changed your mind?"));
+    h.appendChild(document.createTextNode(heading || "Changed your mind?"));
     b.appendChild(x);
     b.appendChild(h);
-    b.appendChild(el("p", "Click the recruiting icon down here any time to bring this back."));
+    b.appendChild(el("p", text || "Click the recruiting icon down here any time to bring this back."));
     document.body.appendChild(b);
     btn.classList.add("rc-pulse");
     function done() { clearTimeout(tipTimer); b.remove(); btn.classList.remove("rc-pulse"); }
@@ -178,4 +179,7 @@
   var seen = false;
   try { seen = !!sessionStorage.getItem("usb-recruit"); } catch (e) { /* show anyway */ }
   if (!seen) setTimeout(open, 500);
+  else setTimeout(function () {
+    tip("Looking for recruiting?", "Click the recruiting icon down here to see the callout info and get to the recruiting page.");
+  }, 1200);
 })();
