@@ -369,8 +369,8 @@ html.crt-on .crt { display: block; }
 #members .avatar { transition: width 0.18s ease, height 0.18s ease; }
 #board.max .igrid { grid-template-columns: repeat(auto-fill, minmax(196px, 1fr)); gap: 16px 10px; }
 #board.max .item { gap: 6px; padding: 12px 6px; font-size: 15px; }
-#board.max .avatar { width: 156px; height: 156px; border-width: 3px; }
-#board.max .avatar .ico { width: 96px; height: 96px; }
+#board.max #members .avatar { width: 156px; height: 156px; border-width: 3px; }
+#board.max #members .avatar .ico { width: 96px; height: 96px; }
 #board.max .fmeta { font-size: 13.5px; }
 #board.max .content h3.sec { margin-bottom: 14px; font-size: 22px; }
 
