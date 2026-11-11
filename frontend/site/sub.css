@@ -328,6 +328,7 @@ html.crt-on .crt { display: block; }
 .hr-left { display: grid; gap: 12px; align-content: start; }
 .page .hr-top .hr-left > div, .page .hr-top .hr-about > div { margin: 0; }
 .hr-about { grid-column: 1 / -1; }
+.page .hr-paused { text-align: center; background: #fff8dc; border-color: #e8c862; }
 @media (max-width: 860px) { .hr-top .hr-flyer { order: 2; } .hr-about { order: 3; } }
 
 /* Blog post: details on the left, "more posts" on the right, then the article across the full width */

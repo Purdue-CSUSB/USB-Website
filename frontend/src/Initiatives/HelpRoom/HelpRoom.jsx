@@ -7,6 +7,7 @@ const DSAI_MAPS_LINK = 'https://maps.app.goo.gl/okjBeYTmFwdubUJt5';
 const GOOGLE_FORM_LINK = 'https://docs.google.com/forms/d/e/1FAIpQLSdHIeDWH19bZ0J9UsDkCvu7z75RwxH1WIAjPbe6JnuKYDgkGg/viewform?usp=header';
 
 // TA schedule data - days: 1=Mon, 2=Tue, 3=Wed, 4=Thu
+/*
 const taSchedule = [
   {
     name: "Alex Tu",
@@ -131,6 +132,7 @@ const taSchedule = [
     ]
   }
 ];
+*/
 
 // Helper function to get available TAs for a specific day and hour
 const getAvailableTAs = (day, hour) => {
@@ -221,6 +223,28 @@ export default function HelpRoom() {
             Help Room
           </motion.h1>
 
+          {/* Not Running Notice */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.25, delay: 0.02 }}
+            className="mb-12"
+          >
+            <motion.div
+              whileHover={{ scale: 1.02, boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05)' }}
+              transition={{ duration: 0.18, ease: 'easeOut' }}
+              className="rounded-xl p-8 text-center"
+              style={{ backgroundColor: '#FEF3C7', willChange: 'transform, box-shadow' }}
+            >
+              <h2 className="font-montserrat text-2xl font-bold mb-3" style={{ color: '#333333FF' }}>
+                Help Room Is Paused This Semester
+              </h2>
+              <p className="font-raleway text-base max-w-2xl mx-auto" style={{ color: '#333333FF' }}>
+                Help Room is not actively running this semester while we make some changes behind the scenes. We're excited to share an announcement with you soon!
+              </p>
+            </motion.div>
+          </motion.div>
+
           {/* General Info Section */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -234,6 +258,7 @@ export default function HelpRoom() {
               className="bg-gray-50 rounded-xl p-8 mb-6"
               style={{ willChange: 'transform, box-shadow' }}
             >
+              {/* Office Hours & Location - hidden while Help Room is paused
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
                 <div>
                   <h3 className="font-montserrat text-xl font-bold mb-3" style={{ color: '#333333FF' }}>
@@ -258,7 +283,8 @@ export default function HelpRoom() {
                   </p>
                 </div>
               </div>
-              <div className="mt-6">
+              */}
+              <div>
                 <h3 className="font-montserrat text-xl font-bold mb-3" style={{ color: '#333333FF' }}>
                   About Help Room
                 </h3>
@@ -272,7 +298,8 @@ export default function HelpRoom() {
             </motion.div>
           </motion.div>
 
-          {/* Check-In Section */}
+          {/* ===== Hidden while Help Room is paused this semester =====
+          // Check-In Section
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -322,7 +349,7 @@ export default function HelpRoom() {
             </motion.div>
           </motion.div>
 
-          {/* Find a TA Section */}
+          // Find a TA Section
           <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -336,7 +363,7 @@ export default function HelpRoom() {
                 Select a day and time to see which TAs are available during that hour.
               </p>
 
-              {/* Time Picker */}
+              // Time Picker
               <div className="bg-gray-50 rounded-xl p-6 mb-8">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
                 <div>
@@ -382,7 +409,7 @@ export default function HelpRoom() {
               </div>
             </div>
 
-            {/* Available TAs Results */}
+            // Available TAs Results
             {hasSearched && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -415,7 +442,7 @@ export default function HelpRoom() {
                           {ta.email}
                         </a>
 
-                        {/* Courses */}
+                        // Courses
                         <div className="flex flex-wrap gap-2 mb-3">
                           {ta.courses.map(course => (
                             <span
@@ -428,7 +455,7 @@ export default function HelpRoom() {
                           ))}
                         </div>
 
-                        {/* Virtual or In-Person Badge */}
+                        // Virtual or In-Person Badge
                         {ta.currentType === 'virtual' ? (
                           <motion.button
                             whileHover={hasCheckedIn ? { scale: 1.03 } : {}}
@@ -476,7 +503,7 @@ export default function HelpRoom() {
               </motion.div>
             )}
 
-              {/* Full Schedule Link */}
+              // Full Schedule Link
               <div className="text-center mt-8">
                 <a
                   href="https://docs.google.com/spreadsheets/d/1cL226JWxHXD82kAZvgQtbw1aLsdM5DyDBBqFCNrOiqY/edit?usp=sharing"
@@ -489,7 +516,7 @@ export default function HelpRoom() {
               </div>
             </motion.div>
 
-          {/* Help Room Flyer */}
+          // Help Room Flyer
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -506,7 +533,7 @@ export default function HelpRoom() {
             />
           </motion.div>
 
-          {/* Apply to BoilerHire Section */}
+          // Apply to BoilerHire Section
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -539,6 +566,7 @@ export default function HelpRoom() {
               </motion.a>
             </motion.div>
           </motion.div>
+          ===== End hidden section ===== */}
         </div>
       </section>
       <Footer />
