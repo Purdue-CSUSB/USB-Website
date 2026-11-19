@@ -18,7 +18,7 @@ const OTHER = [['Purdue Technical Projects', 'https://www.usb-purdue-technical-p
 const ext = (n, u) => `<li><a class="ext" href="${u}" target="_blank" rel="noopener">${n}<span class="sr-only"> (opens in a new tab)</span></a></li>`;
 
 /** root: true for pages that sit at the site root (student-wiki.html, 404.html); false for pages in initiatives/. */
-export function shell({ title, slugKey, body, desc, scripts = [], root = false, navHtml, sideHtml, crumbsHtml, sitename = 'Our Initiatives', sitelink = 'cs-resources.html' }) {
+export function shell({ title, slugKey, body, desc, scripts = [], root = false, navHtml, sideHtml, crumbsHtml, wideHtml = '', sitename = 'Our Initiatives', sitelink = 'cs-resources.html' }) {
   const current = PARENT[slugKey] || slugKey;
   const href = (k) => (PAGES[k].startsWith('/') ? (root ? '' : '../') + PAGES[k].slice(1) : (root ? 'initiatives/' : '') + PAGES[k]);
   const link = (k) => `<li><a href="${href(k)}"${k === current ? ' aria-current="page"' : ''}>`;
@@ -60,6 +60,7 @@ export function shell({ title, slugKey, body, desc, scripts = [], root = false, 
 ${body}
     </main>
   </div>
+${wideHtml}
   <footer class="rr-foot"><a href="/"><img src="/assets/brand/usb-icon.webp" alt="Purdue USB" height="36" width="36"></a>
 <ul>${ext('Instagram', 'https://www.instagram.com/purdueusb/')}${ext('LinkedIn', 'https://www.linkedin.com/company/purdueusb/posts/?feedView=all')}<li><a href="mailto:usb@cs.purdue.edu">Email</a></li>${ext('Newsletter', 'https://docs.google.com/forms/d/e/1FAIpQLScv6lNPqYwarlTKhdp5O8htD0DzRKmNRZNln0LPwj8EslcjYA/viewform')}<li><button type="button" id="effect" aria-pressed="false">Old-screen effect: on</button></li></ul>
 <p>&copy; ${new Date().getFullYear()} Undergraduate Student Board. All rights reserved.</p></footer>

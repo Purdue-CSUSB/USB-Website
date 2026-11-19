@@ -499,7 +499,7 @@ body.rp #cols { display: block; }
 .page .mk-card .byline { margin-top: auto; font-size: 13px; }
 .page .mk-card .by-img, .page .mk-feature .by-img { width: 30px; height: 30px; }
 .page .mk-empty { margin: 0; color: var(--muted); }
-.page .mk-feed { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 0 0 14px; padding: 0; background: none; border: 0; box-shadow: none; }
+.page .mk-feed { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; margin: 0 0 14px; padding: 0; background: none; border: 0; box-shadow: none; }
 .page .mk-feed .mk-empty { grid-column: 1 / -1; }
 .page a.igtile { position: relative; display: block; aspect-ratio: 4 / 5; overflow: hidden; color: #fff; text-decoration: none !important; background: #14337a; border: 1px solid #c3cfe6; }
 .page a.igtile img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform 0.25s ease; }
@@ -510,4 +510,9 @@ body.rp #cols { display: block; }
 .page .mk-controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; margin: 4px 0 0; padding: 0; background: none; border: 0; box-shadow: none; }
 .page .mk-controls .btn { margin: 0; }
 .by-ph svg { display: block; }
+@media (max-width: 1000px) { .page .mk-feed { grid-template-columns: repeat(3, 1fr); } }
 @media (max-width: 700px) { .page .mk-feed { grid-template-columns: repeat(2, 1fr); } }
+/* Marketing: the Instagram grid runs the full width of the page, under the sidebar */
+#wide.mk-wide { padding: 8px 28px 30px; border-top: 1px solid #c9c3ad; }
+.page .igtile-cap strong { font-size: 13px; }
+.page .igtile-cap { padding: 24px 10px 9px; }

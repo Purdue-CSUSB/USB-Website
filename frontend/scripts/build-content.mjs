@@ -75,12 +75,14 @@ function buildMarketing(list, slugOf) {
 <section class="mk-sec" aria-labelledby="mk-blog-h"><div class="mk-head"><h2 id="mk-blog-h">From the blog</h2><a class="btn" href="blog.html">All ${list.length} posts</a></div>
 <p class="mk-sub">Written posts, spotlights, and video series about who we are and what we have accomplished.</p>
 ${feature}
-<ul class="mk-grid">${cards}</ul></section>
+<ul class="mk-grid">${cards}</ul></section>`;
+  const wideHtml = `<div id="wide" class="page mk-wide">
 <section class="mk-sec" aria-labelledby="mk-ig-h"><div class="mk-head"><h2 id="mk-ig-h">Follow along on Instagram</h2></div>
 <p class="mk-sub">Our latest updates and events, straight from <a href="https://www.instagram.com/purdueusb/" target="_blank" rel="noopener noreferrer">@purdueusb</a>.</p>
 <div class="mk-feed" id="mk-feed" role="region" aria-label="Latest Instagram posts"><p class="mk-empty">Loading posts&hellip;</p></div>
-<p class="btnrow mk-controls"><a class="btn default" href="https://www.instagram.com/purdueusb/" target="_blank" rel="noopener noreferrer">See more on Instagram</a></p></section>`;
-  write('initiatives/marketing.html', shell({ title: 'Marketing', slugKey: 'marketing', body, desc: 'Marketing - promotion, the USB blog and our Instagram, a Purdue Undergraduate Student Board initiative.', scripts: ['/data.js', '/initiatives/marketing.js'] }));
+<p class="btnrow mk-controls"><a class="btn default" href="https://www.instagram.com/purdueusb/" target="_blank" rel="noopener noreferrer">See more on Instagram</a></p></section>
+</div>`;
+  write('initiatives/marketing.html', shell({ title: 'Marketing', slugKey: 'marketing', body, wideHtml, desc: 'Marketing - promotion, the USB blog and our Instagram, a Purdue Undergraduate Student Board initiative.', scripts: ['/data.js', '/initiatives/marketing.js'] }));
 }
 
 /* ---- Student Wiki ---- */
