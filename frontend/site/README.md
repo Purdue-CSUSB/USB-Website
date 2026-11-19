@@ -26,7 +26,7 @@ python3 -m http.server 8000
 | `data.js` | Snapshot of the board roster, former members and the six latest Instagram posts |
 | `icons.js` | The XP-style vector icon set (inserted into the page before first paint) |
 | `wallpaper.svg` | The "Purdue USB 26/27" hills wallpaper |
-| `initiatives/*.html` | The initiative pages that live on the USB site (Blog, Career Resources, Club Hub, CS193, Help Room, Mentorship, Panels, Social Wellness, Student Forum / Town Hall, You Don't Need a New Laptop), each a full-screen old-style page. Purdue Technical Projects and Research Resources have their own domains and are untouched |
+| `initiatives/*.html` | The initiative pages that live on the USB site (CS Resources, CS193, Marketing, Mentorship, Social Wellness, Student Forum / Town Hall, Websites, You Don't Need a New Laptop). Career Resources, Panels and Club Hub are now sections of the single CS Resources page (the old URLs redirect there, see `vercel.json`); Blog is no longer an initiative of its own and lives on as a page under Marketing. Help Room is no longer linked from anywhere (`help-room.html` is still in the repo). Recruitment is not in the initiatives list; it is `recruiting.html`. The nav on each page comes from `NAV` in `scripts/shell.mjs`, each a full-screen old-style page. Purdue Technical Projects and Research Resources have their own domains and are untouched |
 | `initiatives/help-room.js`, `help-room-data.js`, `blog.js` | The TA finder (with the check-in step), and the blog list/post switching (`blog.html#/post-slug`) |
 | `sub.css`, `sub.js` | Shared styling and the screen-texture switch for those pages |
 | `cursors.css` | The 8-bit mouse cursors |
@@ -63,7 +63,7 @@ What the build does (`frontend/scripts/build-site.mjs`): regenerates the blog, S
 | Instagram posts | Read in the browser from `/api/instagram/posts` (MongoDB, filled by the scraper), falling back to `Instagram Posts/insta_posts.json`, then to the snapshot in `data.js` |
 | Board roster, photos, former members | Read in the browser from `Board Member Photos/board-members.json` and `/board-photos/` (the files the React site uses), falling back to `data.js` |
 | Blog posts, Student Wiki | Regenerated on every build, so a new markdown file plus its manifest entry appears on the next deploy |
-| Initiative pages (Mentorship, CS193, Club Hub, Help Room, ...) | Static HTML in `site/initiatives/`. Edit the page by hand; Club Hub's club list and the Help Room TA schedule are copies |
+| Initiative pages (Mentorship, CS193, CS Resources, ...) | Static HTML in `site/initiatives/`. Edit the page by hand; the CS Resources club list and the Help Room TA schedule are copies |
 
 Kept in `data.js` as `overrides` (not in the live files): each member's initiatives, the "Former President" / "Former Treasurer" titles for Maria Molina and Tristan Sze, and Chris McLoughlin's profile link. They are matched to the live roster by name.
 

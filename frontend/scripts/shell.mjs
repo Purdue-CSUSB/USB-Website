@@ -2,21 +2,26 @@
 export const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
 export const PAGES = {
-  blog: 'blog.html', 'career-resources': 'career-resources.html', 'club-hub': 'club-hub.html', cs193: 'cs193.html',
-  'help-room': 'help-room.html', mentorship: 'mentorship.html', panels: 'panels.html', 'social-wellness': 'social-wellness.html',
-  'town-hall': 'town-hall.html', 'you-dont-need-a-new-laptop': 'you-dont-need-a-new-laptop.html',
+  'cs-resources': 'cs-resources.html', cs193: 'cs193.html', marketing: 'marketing.html', mentorship: 'mentorship.html',
+  'social-wellness': 'social-wellness.html', 'town-hall': 'town-hall.html', websites: 'websites.html',
+  'you-dont-need-a-new-laptop': 'you-dont-need-a-new-laptop.html',
+  /* Folded into another initiative; still pages, so they keep the parent highlighted. */
+  blog: 'blog.html',
 };
+export const PARENT = { blog: 'marketing' };
 export const NAV = [
-  ['Blog', 'blog'], ['Career Resources', 'career-resources'], ['Club Hub', 'club-hub'], ['CS193', 'cs193'], ['Help Room', 'help-room'],
-  ['Mentorship', 'mentorship'], ['Panels', 'panels'], ['Social Wellness', 'social-wellness'], ['Student Forum / Town Hall', 'town-hall'],
+  ['CS Resources', 'cs-resources'], ['CS193', 'cs193'], ['Marketing', 'marketing'], ['Mentorship', 'mentorship'],
+  ['Social Wellness', 'social-wellness'], ['Student Forum / Town Hall', 'town-hall'], ['Websites', 'websites'],
   ['You Don’t Need a New Laptop', 'you-dont-need-a-new-laptop'],
 ];
 const OTHER = [['Purdue Technical Projects', 'https://www.usb-purdue-technical-projects.com/'], ['Research Resources', 'https://www.usb-research-resources.com/']];
 const ext = (n, u) => `<li><a class="ext" href="${u}" target="_blank" rel="noopener">${n}<span class="sr-only"> (opens in a new tab)</span></a></li>`;
 
 /** root: true for pages that sit at the site root (student-wiki.html, 404.html); false for pages in initiatives/. */
-export function shell({ title, slugKey, body, desc, scripts = [], root = false, navHtml, sideHtml, crumbsHtml, sitename = 'Our Initiatives', sitelink = 'blog.html' }) {
-  const link = (k) => `<li><a href="${root ? 'initiatives/' : ''}${PAGES[k]}"${k === slugKey ? ' aria-current="page"' : ''}>`;
+export function shell({ title, slugKey, body, desc, scripts = [], root = false, navHtml, sideHtml, crumbsHtml, sitename = 'Our Initiatives', sitelink = 'cs-resources.html' }) {
+  const current = PARENT[slugKey] || slugKey;
+  const href = (k) => (PAGES[k].startsWith('/') ? (root ? '' : '../') + PAGES[k].slice(1) : (root ? 'initiatives/' : '') + PAGES[k]);
+  const link = (k) => `<li><a href="${href(k)}"${k === current ? ' aria-current="page"' : ''}>`;
   const nav = NAV.map(([n, k]) => `${link(k)}${n}</a></li>`).join('');
   const other = OTHER.map(([n, u]) => ext(n, u)).join('');
   const up = root ? '' : '../';

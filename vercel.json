@@ -11,6 +11,9 @@
   ],
   "redirects": [
     { "source": "/initiatives", "destination": "/#initiatives", "permanent": false },
+    { "source": "/initiatives/career-resources", "destination": "/initiatives/cs-resources", "permanent": false },
+    { "source": "/initiatives/panels", "destination": "/initiatives/cs-resources", "permanent": false },
+    { "source": "/initiatives/club-hub", "destination": "/initiatives/cs-resources", "permanent": false },
     { "source": "/contact", "destination": "/#contact", "permanent": false }
   ],
   "headers": [

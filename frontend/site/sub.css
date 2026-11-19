@@ -470,3 +470,6 @@ body.rp #cols { display: block; }
   .rp-time b { width: auto; }
 }
 @media (prefers-reduced-motion: reduce) { .rp-pcbob, .rp-shadow, .rp-cur { animation: none; } }
+/* CS Resources: compact list of the clubs at Purdue */
+.page .clublist { columns: 3 220px; column-gap: 24px; margin: 0 0 22px; padding: 0 0 0 20px; }
+.page .clublist li { break-inside: avoid; padding: 2px 0; }
