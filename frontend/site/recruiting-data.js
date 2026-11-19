@@ -5,11 +5,11 @@ window.USB_RECRUITING = {
   enabled: true,
   title: "Now Recruiting",
   callout: "Purdue USB is recruiting new board members!",
-  blurb: "Join us at our first callout on Thursday, November 19 from 7:30 to 8:30 PM in Lawson Commons. Applications open the same day.",
+  blurb: "Join us at our first callout on Thursday, November 19 from 7:45 to 8:45 PM in Lawson Commons. Applications open the same day.",
   pageUrl: "/recruiting.html",
   applyUrl: "https://docs.google.com/forms/d/e/1FAIpQLScLZvV6_VFQPZeBJ8V0xmlrehybLwhw-kDmXwQhFXtiP307Qg/viewform",  /* only shown while applications are open (see applications below) */
   applyLabel: "Apply Now",
-  next: { heading: "Callout #1", when: "Thursday, November 19 · 7:30–8:30 PM", where: "Lawson Commons", note: "Applications open the same night.", iso: "2026-11-19T19:30:00-05:00", endIso: "2026-11-19T20:30:00-05:00" },
+  next: { heading: "Callout #1", when: "Thursday, November 19 · 7:45–8:45 PM", where: "Lawson Commons", note: "Applications open the same night.", iso: "2026-11-19T19:45:00-05:00", endIso: "2026-11-19T20:45:00-05:00" },
   /* The hero countdown counts down to "opens", then to "closes". Times are Eastern. */
   applications: { opens: "2026-11-19T19:30:00-05:00", closes: "2027-01-22T23:59:00-05:00" },
   intro: "The Undergraduate Student Board is run by CS students, for CS students. We run CS193, host student forums and town halls, put on career panels and social events, and keep a set of resources for undergrads. Joining the board means helping make the CS experience at Purdue better.",
@@ -20,7 +20,7 @@ window.USB_RECRUITING = {
     { i: "i-mail", t: "Hear back", d: "We announce decisions once interviews wrap up." }
   ],
   timeline: [
-    { date: "Thu, Nov 19", label: "Callout #1, 7:30–8:30 PM in Lawson Commons. Applications open." },
+    { date: "Thu, Nov 19", label: "Callout #1, 7:45–8:45 PM in Lawson Commons. Applications open." },
     { date: "January", label: "Callout #2 (dates to be announced)" },
     { date: "Fri, Jan 22", label: "Applications due" },
     { date: "To be announced", label: "Interviews" },
