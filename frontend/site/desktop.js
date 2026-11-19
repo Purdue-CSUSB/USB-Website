@@ -883,7 +883,7 @@
       return (Array.isArray(rows) ? rows : []).map(function (p) {
         return { id: p.id, caption: p.caption || "", timestamp: p.timestamp, permalink: p.permalink || "https://www.instagram.com/purdueusb/",
           eventTitle: p.eventTitle, image: p.imageUrl || p.image || null, w: p.width || p.w, h: p.height || p.h };
-      }).filter(function (p) { return p.image; }).slice(0, 6);
+      }).filter(function (p) { return p.image; }).sort(function (x, y) { return (Date.parse(y.timestamp) || 0) - (Date.parse(x.timestamp) || 0); }).slice(0, 6);
     }
     return getJson("/api/instagram/posts").then(function (d) {
       var posts = map(d && d.posts);

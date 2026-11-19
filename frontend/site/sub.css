@@ -473,3 +473,41 @@ body.rp #cols { display: block; }
 /* CS Resources: compact list of the clubs at Purdue */
 .page .clublist { columns: 3 220px; column-gap: 24px; margin: 0 0 22px; padding: 0 0 0 20px; }
 .page .clublist li { break-inside: avoid; padding: 2px 0; }
+
+/* Marketing: blog highlights and the Instagram feed */
+.page .mk-sec { margin: 0 0 30px; }
+.page .mk-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; margin: 0 0 6px; }
+.page .mk-head { padding: 0; background: none; border: 0; box-shadow: none; }
+.page .mk-head h2 { margin: 0; }
+.page .mk-feature .byline, .page .mk-card .byline { justify-content: flex-start; }
+.page .mk-sub { margin: 0 0 14px; color: var(--muted); }
+.page a.mk-feature { display: block; margin: 0 0 14px; padding: 18px 22px 16px; color: #111; text-decoration: none !important; background: linear-gradient(135deg, #f3f7ff, #e2ebfb); border: 2px outset #f4f1e6; border-left: 8px solid var(--gold); }
+.page a.mk-feature:hover { background: linear-gradient(135deg, #fffaf0, #fdecc8); }
+.page .mk-feature h3 { margin: 6px 0 4px; color: var(--link); font: 700 28px/1.2 var(--serif); }
+.page .mk-feature p { margin: 0 0 10px; font-size: 17px; }
+.page .mk-tag { display: inline-block; margin-right: 8px; padding: 1px 10px; color: #fff; font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; background: #c46a0c; border-radius: 10px; }
+.page .mk-more { display: block; margin-top: 10px; color: var(--link); font-weight: 700; text-decoration: underline; }
+.page .mk-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; margin: 0; padding: 0; list-style: none; }
+.page a.mk-card { display: flex; flex-direction: column; height: 100%; padding: 12px 14px; color: #111; text-decoration: none !important; background: #fff; border: 1px solid #c3cfe6; border-top: 5px solid #2c6fe0; }
+.page .mk-grid li:nth-child(4n + 2) .mk-card { border-top-color: #2f9a47; }
+.page .mk-grid li:nth-child(4n + 3) .mk-card { border-top-color: #ee861a; }
+.page .mk-grid li:nth-child(4n) .mk-card { border-top-color: #cf3a3a; }
+.page a.mk-card:hover { background: #fffaf0; }
+.page .mk-card .cat { align-self: flex-start; margin-bottom: 6px; }
+.page .mk-card h3 { margin: 0 0 4px; color: var(--link); font: 700 18px/1.25 var(--serif); }
+.page .mk-card p { margin: 0 0 8px; font-size: 14.5px; }
+.page .mk-card .byline { margin-top: auto; font-size: 13px; }
+.page .mk-card .by-img, .page .mk-feature .by-img { width: 30px; height: 30px; }
+.page .mk-empty { margin: 0; color: var(--muted); }
+.page .mk-feed { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 0 0 14px; padding: 0; background: none; border: 0; box-shadow: none; }
+.page .mk-feed .mk-empty { grid-column: 1 / -1; }
+.page a.igtile { position: relative; display: block; aspect-ratio: 4 / 5; overflow: hidden; color: #fff; text-decoration: none !important; background: #14337a; border: 1px solid #c3cfe6; }
+.page a.igtile img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform 0.25s ease; }
+.page a.igtile:hover img, .page a.igtile:focus-visible img { transform: scale(1.04); }
+.page .igtile-cap { position: absolute; inset: auto 0 0 0; display: flex; flex-direction: column; gap: 2px; padding: 28px 12px 10px; background: linear-gradient(to top, rgba(8, 20, 52, 0.92), rgba(8, 20, 52, 0)); text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6); }
+.page .igtile-cap strong { display: -webkit-box; overflow: hidden; font-size: 14.5px; line-height: 1.3; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.page .igtile-cap time { font-size: 11px; letter-spacing: 0.03em; text-transform: uppercase; opacity: 0.85; }
+.page .mk-controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; margin: 4px 0 0; padding: 0; background: none; border: 0; box-shadow: none; }
+.page .mk-controls .btn { margin: 0; }
+.by-ph svg { display: block; }
+@media (max-width: 700px) { .page .mk-feed { grid-template-columns: repeat(2, 1fr); } }

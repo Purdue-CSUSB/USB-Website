@@ -1,5 +1,5 @@
 /* Regenerates the pages whose content lives in the repo's frontend/public folder, so a new blog post or wiki article
-   shows up on the next deploy: initiatives/blog.html, student-wiki.html (+ wiki-data.js), 404.html.
+   shows up on the next deploy: initiatives/blog.html, initiatives/marketing.html (latest posts), student-wiki.html (+ wiki-data.js), 404.html.
    Runs as part of `npm run build` (or on its own: `node scripts/build-content.mjs`). */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -23,19 +23,21 @@ const categoryLabel = (raw) => {
   return s.split(' ').map((w) => (/^[A-Z0-9]{2,}$/.test(w) ? w : cap(w.toLowerCase()))).join(' ');
 };
 
-/* ---- Author photos come from the same board data the live site uses ---- */
-const board = JSON.parse(read(path.join(PUB, 'Board Member Photos/board-members.json')));
-const photoBase = new Map();
-for (const m of [...(board.members || []), ...(board.alumni || [])]) {
-  const file = String(m.photo || '').match(/([^/]+)\.webp$/i);
-  if (file && m.srcBase) photoBase.set(file[1].toLowerCase(), m.srcBase);
+/* ---- Author photos: the same ones Meet the Board shows (site/assets/board). Authors without one get the placeholder tile ---- */
+const boardPhotos = new Map();
+const BOARD_DIR = path.join(SITE, 'assets/board');
+if (fs.existsSync(BOARD_DIR)) {
+  for (const f of fs.readdirSync(BOARD_DIR)) {
+    const m = f.match(/^(.+?)\.[0-9a-f]+-256\.webp$/i);
+    if (m) boardPhotos.set(m[1].toLowerCase(), `/assets/board/${f.replace(/-256\.webp$/i, '')}`);
+  }
 }
 function avatar(authorImage, name) {
   const m = String(authorImage || '').match(/([^/]+?)\.(?:webp|png)$/i);
-  const base = m && photoBase.get(m[1].toLowerCase());
+  const base = m && boardPhotos.get(m[1].toLowerCase());
   return base
     ? `<img class="by-img" src="${base}-256.webp" alt="" width="36" height="36">`
-    : `<span class="by-img by-ph" aria-hidden="true">${esc(String(name || '?').trim()[0])}</span>`;
+    : `<span class="by-img by-ph" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22"><circle cx="12" cy="8" r="4.2" fill="#f6d2a8"/><path d="M3.5 22c.7-5 4-8 8.5-8s7.8 3 8.5 8z" fill="#2457c7"/></svg></span>`;
 }
 
 const mdToHtml = (md) => marked.parse(md.replace(/^---[\s\S]*?---\s*/m, ''), { gfm: true })
@@ -58,6 +60,27 @@ async function buildBlog() {
   const body = `<section id="bloglist"><header class="rr-head"><h1>Blog Posts</h1></header><ul class="postlist">\n${cards}\n</ul></section>\n${posts}`;
   write('initiatives/blog.html', shell({ title: 'Blog', slugKey: 'blog', body, scripts: ['/initiatives/blog.js'] }));
   console.log(`blog: ${list.length} posts`);
+  buildMarketing(list, slugOf);
+}
+
+/* ---- Marketing: the newest blog posts, plus a live Instagram feed filled in by initiatives/marketing.js ---- */
+function buildMarketing(list, slugOf) {
+  const byDate = [...list].sort((a, b) => (Date.parse(b.date) || 0) - (Date.parse(a.date) || 0));
+  const meta = (p) => `<span class="byline">${avatar(p.authorImage, p.author)}<span>${esc(p.author)}</span>${p.date ? `<span class="date">${esc(p.date)}</span>` : ''}</span>`;
+  const [first, ...rest] = byDate;
+  const feature = first ? `<a class="mk-feature" href="blog.html#/${slugOf(first)}"><span class="mk-tag">Latest post</span>${first.category ? `<span class="cat">${esc(categoryLabel(first.category))}</span>` : ''}<h3>${esc(first.title)}</h3>${first.subtitle ? `<p>${esc(first.subtitle)}</p>` : ''}${meta(first)}<span class="mk-more">Read the post &raquo;</span></a>` : '';
+  const cards = rest.slice(0, 3).map((p) => `<li><a class="mk-card" href="blog.html#/${slugOf(p)}">${p.category ? `<span class="cat">${esc(categoryLabel(p.category))}</span>` : ''}<h3>${esc(p.title)}</h3>${p.subtitle ? `<p>${esc(p.subtitle)}</p>` : ''}${meta(p)}</a></li>`).join('');
+  const body = `<header class="rr-head"><h1>Marketing</h1></header>
+<p class="lead">Marketing tells the USB story. We promote our events and initiatives, and we run the USB blog.</p>
+<section class="mk-sec" aria-labelledby="mk-blog-h"><div class="mk-head"><h2 id="mk-blog-h">From the blog</h2><a class="btn" href="blog.html">All ${list.length} posts</a></div>
+<p class="mk-sub">Written posts, spotlights, and video series about who we are and what we have accomplished.</p>
+${feature}
+<ul class="mk-grid">${cards}</ul></section>
+<section class="mk-sec" aria-labelledby="mk-ig-h"><div class="mk-head"><h2 id="mk-ig-h">Follow along on Instagram</h2></div>
+<p class="mk-sub">Our latest updates and events, straight from <a href="https://www.instagram.com/purdueusb/" target="_blank" rel="noopener noreferrer">@purdueusb</a>.</p>
+<div class="mk-feed" id="mk-feed" role="region" aria-label="Latest Instagram posts"><p class="mk-empty">Loading posts&hellip;</p></div>
+<p class="btnrow mk-controls"><a class="btn default" href="https://www.instagram.com/purdueusb/" target="_blank" rel="noopener noreferrer">See more on Instagram</a></p></section>`;
+  write('initiatives/marketing.html', shell({ title: 'Marketing', slugKey: 'marketing', body, desc: 'Marketing - promotion, the USB blog and our Instagram, a Purdue Undergraduate Student Board initiative.', scripts: ['/data.js', '/initiatives/marketing.js'] }));
 }
 
 /* ---- Student Wiki ---- */
