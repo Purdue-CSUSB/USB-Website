@@ -11,7 +11,7 @@ window.USB_RECRUITING = {
   applyLabel: "Apply Now",
   next: { heading: "Callout #1", when: "Thursday, November 19 · 7:45–8:45 PM", where: "Lawson Commons", note: "Applications open the same night.", iso: "2026-11-19T19:45:00-05:00", endIso: "2026-11-19T20:45:00-05:00" },
   /* The hero countdown counts down to "opens", then to "closes". Times are Eastern. */
-  applications: { opens: "2026-11-19T19:30:00-05:00", closes: "2027-01-22T23:59:00-05:00" },
+  applications: { opens: "2026-11-19T19:45:00-05:00", closes: "2027-01-22T23:59:00-05:00" },
   intro: "The Undergraduate Student Board is run by CS students, for CS students. We run CS193, host student forums and town halls, put on career panels and social events, and keep a set of resources for undergrads. Joining the board means helping make the CS experience at Purdue better.",
   steps: [
     { i: "i-people", t: "Come to a callout", d: "We hold two identical callouts. Attend at least one to have your application considered. You'll hear what USB does, meet current board members and get your questions answered." },
