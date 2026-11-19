@@ -401,6 +401,7 @@ body.rp #cols { display: block; }
 .rp-open strong { color: #ffe27a; font: 700 20px var(--sans); }
 .rp-open span { color: #cfe0ff; font: 14px var(--sans); }
 .rp-open[hidden] { display: none; }
+.rp-next[hidden] { display: none; }
 
 /* buttons */
 .rp-cta { display: flex; flex-wrap: wrap; gap: 10px; margin: 0; }
