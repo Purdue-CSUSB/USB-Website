@@ -7,7 +7,7 @@ window.USB_RECRUITING = {
   callout: "Purdue USB is recruiting new board members!",
   blurb: "Join us at our first callout on Thursday, November 19 from 7:45 to 8:45 PM in Lawson Commons. Applications open the same day.",
   pageUrl: "/recruiting.html",
-  applyUrl: "https://docs.google.com/forms/d/e/1FAIpQLScLZvV6_VFQPZeBJ8V0xmlrehybLwhw-kDmXwQhFXtiP307Qg/viewform",  /* only shown while applications are open (see applications below) */
+  applyUrl: "https://usb.clubrecruiter.app/q/943upx8",  /* only shown while applications are open (see applications below) */
   applyLabel: "Apply Now",
   next: { heading: "Callout #1", when: "Thursday, November 19 · 7:45–8:45 PM", where: "Lawson Commons", note: "Applications open the same night.", iso: "2026-11-19T19:45:00-05:00", endIso: "2026-11-19T20:45:00-05:00" },
   /* The hero countdown counts down to "opens", then to "closes". Times are Eastern. */
