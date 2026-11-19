@@ -397,6 +397,10 @@ body.rp #cols { display: block; }
 .rp-count-row b { color: #ffe27a; font: 700 28px/1.1 "Courier New", monospace; font-variant-numeric: tabular-nums; }
 .rp-count-row span { color: #cfe0ff; font: 11px var(--sans); text-transform: uppercase; letter-spacing: 0.06em; }
 .rp-count[hidden] { display: none; }
+.rp-open { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; margin: 0 0 14px; padding: 10px 14px; background: linear-gradient(180deg, #17348c, #0a1f66); border: 2px outset #5b86e8; }
+.rp-open strong { color: #ffe27a; font: 700 20px var(--sans); }
+.rp-open span { color: #cfe0ff; font: 14px var(--sans); }
+.rp-open[hidden] { display: none; }
 
 /* buttons */
 .rp-cta { display: flex; flex-wrap: wrap; gap: 10px; margin: 0; }

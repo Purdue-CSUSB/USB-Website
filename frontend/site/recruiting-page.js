@@ -19,11 +19,6 @@
   $("rp-when").textContent = [nx.when, nx.where].filter(Boolean).join(" · ");
   $("rp-next-note").textContent = nx.note || "";
 
-  /* Apply buttons (hero and bottom) appear once an application link is set. */
-  ["rp-apply", "rp-apply2"].forEach(function (id) {
-    var a = $(id);
-    if (c.applyUrl) { a.href = c.applyUrl; a.textContent = (c.applyLabel || "Apply Now") + " »"; a.hidden = false; }
-  });
   if (c.contact) $("rp-mail").href = "mailto:" + c.contact;
 
   /* Steps */
@@ -52,24 +47,44 @@
     var d = el("details"); d.appendChild(el("summary", f.q)); d.appendChild(el("p", f.a)); faq.appendChild(d);
   });
 
-  /* Hero countdown: until applications open, then until they close. It disappears after that. */
+  /* Hero: a countdown until applications open. When the time comes it is replaced by the Apply button (hero and
+     bottom of the page), with a short "closes in" line. After the deadline the Apply buttons go away again. */
   var ap = c.applications || {};
   var opens = ap.opens ? new Date(ap.opens).getTime() : 0;
   var closes = ap.closes ? new Date(ap.closes).getTime() : 0;
-  var box = $("rp-count");
+  var box = $("rp-count"), openBox = $("rp-open");
+  function left(ms) {
+    var m = Math.max(0, Math.floor(ms / 60000)), d = Math.floor(m / 1440), h = Math.floor((m % 1440) / 60);
+    return d ? d + (d === 1 ? " day " : " days ") + h + "h left" : h ? h + "h " + (m % 60) + "m left" : (m % 60) + "m left";
+  }
+  function setApply(show) {
+    ["rp-apply", "rp-apply2"].forEach(function (id) {
+      var a = $(id);
+      if (show && c.applyUrl) { a.href = c.applyUrl; a.textContent = (c.applyLabel || "Apply Now") + " \u00bb"; a.hidden = false; }
+      else a.hidden = true;
+    });
+  }
   function tick() {
-    var now = Date.now(), to = 0, label = "";
-    if (opens && now < opens) { to = opens; label = "Applications open in"; }
-    else if (closes && now < closes) { to = closes; label = "Applications close in"; }
-    if (!to) { box.hidden = true; return false; }
-    var secs = Math.floor((to - now) / 1000), m = Math.floor(secs / 60);
-    $("rp-count-label").textContent = label;
-    $("rp-d").textContent = Math.floor(m / 1440);
-    $("rp-h").textContent = Math.floor((m % 1440) / 60);
-    $("rp-m").textContent = m % 60;
-    $("rp-s").textContent = secs % 60;
-    box.hidden = false;
-    return true;
+    var now = Date.now();
+    if (opens && now < opens) {
+      var secs = Math.floor((opens - now) / 1000), m = Math.floor(secs / 60);
+      $("rp-count-label").textContent = "Applications open in";
+      $("rp-d").textContent = Math.floor(m / 1440);
+      $("rp-h").textContent = Math.floor((m % 1440) / 60);
+      $("rp-m").textContent = m % 60;
+      $("rp-s").textContent = secs % 60;
+      box.hidden = false; openBox.hidden = true; setApply(false);
+      return true;
+    }
+    box.hidden = true;
+    if (!closes || now < closes) {
+      openBox.hidden = false;
+      $("rp-open-left").textContent = closes ? "Closes in " + left(closes - now).replace(" left", "") + "." : "";
+      setApply(true);
+      return !!closes;
+    }
+    openBox.hidden = true; setApply(false);
+    return false;
   }
   if (tick()) setInterval(tick, 1000);
 

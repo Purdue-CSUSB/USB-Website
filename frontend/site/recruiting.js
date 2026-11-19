@@ -132,7 +132,9 @@
     var row = el("div", "", "rc-btns");
     var more = link(cfg.pageUrl, "Learn more", "btn default");
     row.appendChild(more);
-    if (cfg.applyUrl) row.appendChild(link(cfg.applyUrl, cfg.applyLabel || "Apply Now", "btn", true));
+    var ap = cfg.applications || {}, now = Date.now();
+    var applyOpen = (!ap.opens || now >= new Date(ap.opens).getTime()) && (!ap.closes || now < new Date(ap.closes).getTime());
+    if (cfg.applyUrl && applyOpen) row.appendChild(link(cfg.applyUrl, cfg.applyLabel || "Apply Now", "btn", true));
     var later = el("button", "Close", "btn");
     later.type = "button";
     row.appendChild(later);
